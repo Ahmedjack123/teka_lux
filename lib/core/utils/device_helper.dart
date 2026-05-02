@@ -64,7 +64,7 @@ class DeviceHelper {
   }
 
   static double onboardingImageHeight(double availableHeight) {
-    return math.max(188, math.min(availableHeight * .42, 324));
+    return math.max(248, math.min(availableHeight * .54, 430));
   }
 
   static double authTopSpacing(BuildContext context) {

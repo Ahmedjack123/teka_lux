@@ -6,12 +6,10 @@ import '../../../../core/theming/theming.dart';
 class OnboardingSlideMark extends StatelessWidget {
   const OnboardingSlideMark({
     required this.index,
-    required this.eyebrow,
     super.key,
   });
 
   final int index;
-  final String eyebrow;
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +21,6 @@ class OnboardingSlideMark extends StatelessWidget {
       );
     }
 
-    return Text(
-      eyebrow,
-      style: AppTextStyles.h2.copyWith(
-        color: AppColors.textStrong,
-        fontSize: 24,
-        fontStyle: FontStyle.italic,
-        letterSpacing: 6,
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }

@@ -124,29 +124,11 @@ abstract class AppLocalizations {
   /// **'SKIP'**
   String get onboardingSkip;
 
-  /// No description provided for @onboardingSkipIntroduction.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip Introduction'**
-  String get onboardingSkipIntroduction;
-
   /// No description provided for @onboardingGetStarted.
   ///
   /// In en, this message translates to:
   /// **'Get Started'**
   String get onboardingGetStarted;
-
-  /// No description provided for @onboardingExploreCollection.
-  ///
-  /// In en, this message translates to:
-  /// **'Explore Collection'**
-  String get onboardingExploreCollection;
-
-  /// No description provided for @onboardingCraftEyebrow.
-  ///
-  /// In en, this message translates to:
-  /// **'CRAFT'**
-  String get onboardingCraftEyebrow;
 
   /// No description provided for @onboardingCraftTitle.
   ///
@@ -160,12 +142,6 @@ abstract class AppLocalizations {
   /// **'From premium fabrics to tailored fits, every detail is thoughtfully designed to bring effortless elegance.'**
   String get onboardingCraftDescription;
 
-  /// No description provided for @onboardingAtelierEyebrow.
-  ///
-  /// In en, this message translates to:
-  /// **'ATELIER'**
-  String get onboardingAtelierEyebrow;
-
   /// No description provided for @onboardingAtelierTitle.
   ///
   /// In en, this message translates to:
@@ -177,12 +153,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Timeless pieces designed with precision, crafted for comfort, and made to elevate your everyday wardrobe.'**
   String get onboardingAtelierDescription;
-
-  /// No description provided for @onboardingLuxeEyebrow.
-  ///
-  /// In en, this message translates to:
-  /// **'TEKA LUXE'**
-  String get onboardingLuxeEyebrow;
 
   /// No description provided for @onboardingLuxeTitle.
   ///

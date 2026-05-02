@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/theming/theming.dart';
@@ -25,30 +27,35 @@ class OnboardingImagePanel extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: height,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-            alignment: alignment,
-            filterQuality: FilterQuality.high,
-          ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.background.withValues(alpha: .08),
-                  AppColors.background.withValues(alpha: .18),
-                  AppColors.background.withValues(alpha: .96),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final panelWidth = math.min(constraints.maxWidth, height * .72);
+
+          return Center(
+            child: Container(
+              width: panelWidth,
+              height: height,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppSizes.radiusXl),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.textStrong.withValues(alpha: .08),
+                    blurRadius: 24,
+                    offset: const Offset(0, 14),
+                  ),
                 ],
-                stops: const [0, .62, 1],
+              ),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                alignment: alignment,
+                filterQuality: FilterQuality.high,
+                isAntiAlias: true,
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

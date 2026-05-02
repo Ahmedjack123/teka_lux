@@ -24,16 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingSkip => 'SKIP';
 
   @override
-  String get onboardingSkipIntroduction => 'Skip Introduction';
-
-  @override
   String get onboardingGetStarted => 'Get Started';
-
-  @override
-  String get onboardingExploreCollection => 'Explore Collection';
-
-  @override
-  String get onboardingCraftEyebrow => 'CRAFT';
 
   @override
   String get onboardingCraftTitle => 'Crafted with Purpose';
@@ -43,17 +34,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'From premium fabrics to tailored fits, every detail is thoughtfully designed to bring effortless elegance.';
 
   @override
-  String get onboardingAtelierEyebrow => 'ATELIER';
-
-  @override
   String get onboardingAtelierTitle => 'Refined Everyday Essentials';
 
   @override
   String get onboardingAtelierDescription =>
       'Timeless pieces designed with precision, crafted for comfort, and made to elevate your everyday wardrobe.';
-
-  @override
-  String get onboardingLuxeEyebrow => 'TEKA LUXE';
 
   @override
   String get onboardingLuxeTitle => 'Elevate Your Style';

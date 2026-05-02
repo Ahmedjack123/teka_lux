@@ -30,8 +30,10 @@ class OnboardingSlideCopy extends StatelessWidget {
       child: Column(
         crossAxisAlignment: alignment,
         children: [
-          OnboardingSlideMark(index: index, eyebrow: copy.eyebrow),
-          const SizedBox(height: AppSizes.lg),
+          if (index == 0) ...[
+            OnboardingSlideMark(index: index),
+            const SizedBox(height: AppSizes.lg),
+          ],
           Text(
             copy.title,
             textAlign: textAlign,
@@ -62,12 +64,10 @@ class OnboardingSlideCopy extends StatelessWidget {
 
 class _LocalizedOnboardingCopy {
   const _LocalizedOnboardingCopy({
-    required this.eyebrow,
     required this.title,
     required this.description,
   });
 
-  final String eyebrow;
   final String title;
   final String description;
 
@@ -77,17 +77,14 @@ class _LocalizedOnboardingCopy {
   ) {
     return switch (copy) {
       OnboardingCopyKey.craft => _LocalizedOnboardingCopy(
-          eyebrow: l10n.onboardingCraftEyebrow,
           title: l10n.onboardingCraftTitle,
           description: l10n.onboardingCraftDescription,
         ),
       OnboardingCopyKey.atelier => _LocalizedOnboardingCopy(
-          eyebrow: l10n.onboardingAtelierEyebrow,
           title: l10n.onboardingAtelierTitle,
           description: l10n.onboardingAtelierDescription,
         ),
       OnboardingCopyKey.luxe => _LocalizedOnboardingCopy(
-          eyebrow: l10n.onboardingLuxeEyebrow,
           title: l10n.onboardingLuxeTitle,
           description: l10n.onboardingLuxeDescription,
         ),

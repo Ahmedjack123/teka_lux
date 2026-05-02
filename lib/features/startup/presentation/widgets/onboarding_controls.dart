@@ -42,12 +42,6 @@ class OnboardingControls extends StatelessWidget {
             onPressed: isSaving ? null : onSkip,
             isLoading: isSaving,
           ),
-          const SizedBox(height: AppSizes.md),
-          OnboardingActionButton(
-            label: l10n.onboardingExploreCollection,
-            onPressed: isSaving ? null : onSkip,
-            isSecondary: true,
-          ),
         ] else ...[
           OnboardingActionButton(
             label: currentIndex == 0
@@ -71,11 +65,7 @@ class OnboardingControls extends StatelessWidget {
                 ),
               ),
             ),
-            child: Text(
-              currentIndex == 0
-                  ? l10n.onboardingSkip
-                  : l10n.onboardingSkipIntroduction,
-            ),
+            child: Text(l10n.onboardingSkip),
           ),
         ],
       ],
