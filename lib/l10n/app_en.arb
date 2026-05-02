@@ -1,0 +1,77 @@
+{
+  "@@locale": "en",
+  "appTitle": "Teka Luxe",
+  "@appTitle": {
+    "description": "The application title."
+  },
+  "onboardingSaveError": "Could not save onboarding progress.",
+  "onboardingNext": "Next",
+  "onboardingNextStep": "Next Step",
+  "onboardingSkip": "SKIP",
+  "onboardingSkipIntroduction": "Skip Introduction",
+  "onboardingGetStarted": "Get Started",
+  "onboardingExploreCollection": "Explore Collection",
+  "onboardingCraftEyebrow": "CRAFT",
+  "onboardingCraftTitle": "Crafted with Purpose",
+  "onboardingCraftDescription": "From premium fabrics to tailored fits, every detail is thoughtfully designed to bring effortless elegance.",
+  "onboardingAtelierEyebrow": "ATELIER",
+  "onboardingAtelierTitle": "Refined Everyday Essentials",
+  "onboardingAtelierDescription": "Timeless pieces designed with precision, crafted for comfort, and made to elevate your everyday wardrobe.",
+  "onboardingLuxeEyebrow": "TEKA LUXE",
+  "onboardingLuxeTitle": "Elevate Your Style",
+  "onboardingLuxeDescription": "Discover a curated collection of modern essentials that blend simplicity, quality, and confidence.",
+  "loginTitle": "Welcome",
+  "loginSubtitle": "Please sign in to continue",
+  "emailHint": "Email",
+  "passwordHint": "Password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot Password?",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "noAccount": "Don't have an account?",
+  "dividerOr": "OR",
+  "continueWithGoogle": "Continue with Google",
+  "registerTitle": "Create account",
+  "forgotPasswordTitle": "Forgot Password",
+  "genericErrorTitle": "Something went wrong",
+  "retryAction": "Try again",
+  "colorOptionTooltip": "Color option",
+  "addToWishlistTooltip": "Add to wishlist",
+  "removeFromWishlistTooltip": "Remove from wishlist",
+  "productCardSemanticsLabel": "{title}, {price}",
+  "@productCardSemanticsLabel": {
+    "description": "Accessibility label for a product card.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String",
+        "example": "$49.99"
+      }
+    }
+  },
+  "sizeSemanticsLabel": "Size {size}",
+  "@sizeSemanticsLabel": {
+    "description": "Accessibility label for a size selection pill.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "ratingSemanticsLabel": "Rating {rating} out of {count}",
+  "@ratingSemanticsLabel": {
+    "description": "Accessibility label for a star rating display.",
+    "placeholders": {
+      "rating": {
+        "type": "String",
+        "example": "4.5"
+      },
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  }
+}

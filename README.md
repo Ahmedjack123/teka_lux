@@ -1,6 +1,6 @@
-# teka_luxe
+# Teka Luxe
 
-A new Flutter project.
+Premium T-Shirt e-commerce app.
 
 ## Getting Started
 

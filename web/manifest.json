@@ -1,11 +1,11 @@
 {
-    "name": "teka_luxe",
-    "short_name": "teka_luxe",
+    "name": "Teka Luxe",
+    "short_name": "Teka Luxe",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Premium T-Shirt e-commerce app.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

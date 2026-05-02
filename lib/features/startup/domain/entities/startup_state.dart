@@ -1,0 +1,4 @@
+enum StartupDestination {
+  onboarding,
+  login,
+}
