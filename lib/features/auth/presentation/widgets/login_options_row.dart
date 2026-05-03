@@ -8,53 +8,83 @@ class LoginOptionsRow extends StatelessWidget {
     required this.rememberMe,
     required this.onRememberChanged,
     required this.onForgotPassword,
+    this.compact = false,
     super.key,
   });
 
   final bool rememberMe;
   final ValueChanged<bool> onRememberChanged;
   final VoidCallback onForgotPassword;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox.square(
-          dimension: 28,
-          child: Checkbox(
-            value: rememberMe,
-            onChanged: (value) => onRememberChanged(value ?? false),
-            shape: const CircleBorder(),
-            side: const BorderSide(
-              color: AppColors.divider,
-              width: 1.6,
+        Flexible(
+          child: InkWell(
+            onTap: () => onRememberChanged(!rememberMe),
+            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox.square(
+                  dimension: compact ? 24 : 26,
+                  child: Checkbox(
+                    value: rememberMe,
+                    onChanged: (value) => onRememberChanged(value ?? false),
+                    shape: const CircleBorder(),
+                    side: const BorderSide(
+                      color: AppColors.divider,
+                      width: 1.6,
+                    ),
+                    activeColor: AppColors.primaryDark,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+                const SizedBox(width: AppSizes.xs),
+                Flexible(
+                  child: Text(
+                    l10n.rememberMe,
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
+                    style: AppTextStyles.bodyLg.copyWith(
+                      color: AppColors.textStrong,
+                      fontSize: compact ? 11 : 12,
+                      height: 1.2,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            activeColor: AppColors.primaryDark,
           ),
         ),
-        const SizedBox(width: AppSizes.sm),
-        Expanded(
-          child: Text(
-            l10n.rememberMe,
-            style: AppTextStyles.bodyLg.copyWith(
-              color: AppColors.textStrong,
+        Flexible(
+          flex: 0,
+          child: TextButton(
+            onPressed: onForgotPassword,
+            style: AppButtonStyles.ghost().copyWith(
+              minimumSize: WidgetStateProperty.all(Size.zero),
+              padding: WidgetStateProperty.all(EdgeInsets.zero),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
             ),
-          ),
-        ),
-        TextButton(
-          onPressed: onForgotPassword,
-          style: AppButtonStyles.ghost(),
-          child: Text(
-            l10n.forgotPassword,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.label.copyWith(
-              color: AppColors.primaryDark,
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.4,
+            child: Text(
+              l10n.forgotPassword,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.label.copyWith(
+                color: AppColors.primaryDark,
+                fontSize: compact ? 10 : 11,
+                fontWeight: FontWeight.w800,
+                height: 1.2,
+                letterSpacing: .8,
+              ),
             ),
           ),
         ),

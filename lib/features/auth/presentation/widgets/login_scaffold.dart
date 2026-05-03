@@ -39,10 +39,18 @@ class LoginScaffold extends StatelessWidget {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final compact = constraints.maxHeight < 720;
+            final topSpacing = compact
+                ? AppSizes.lg
+                : DeviceHelper.authTopSpacing(context) * .72;
+            final headerGap = compact ? AppSizes.xl : 48.0;
+            final sectionGap = compact ? AppSizes.md : AppSizes.lg;
+            final actionGap = compact ? AppSizes.lg : AppSizes.xl;
+
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(
                 horizontal: horizontalPadding,
-                vertical: AppSizes.lg,
+                vertical: compact ? AppSizes.md : AppSizes.lg,
               ),
               child: Center(
                 child: ConstrainedBox(
@@ -59,29 +67,35 @@ class LoginScaffold extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: DeviceHelper.authTopSpacing(context)),
-                        const LoginHeader(),
-                        const SizedBox(height: 68),
-                        const LoginFormFields(),
-                        const SizedBox(height: AppSizes.lg),
+                        SizedBox(height: topSpacing),
+                        LoginHeader(compact: compact),
+                        SizedBox(height: headerGap),
+                        LoginFormFields(compact: compact),
+                        SizedBox(height: sectionGap),
                         LoginOptionsRow(
                           rememberMe: rememberMe,
                           onRememberChanged: onRememberChanged,
                           onForgotPassword: onForgotPassword,
+                          compact: compact,
                         ),
-                        const SizedBox(height: AppSizes.xl),
+                        SizedBox(height: actionGap),
                         PrimaryButton(
                           label: l10n.signIn,
                           onPressed: onSignIn,
+                          height: compact ? 52 : AppSizes.buttonHeight,
                         ),
-                        const SizedBox(height: AppSizes.xl),
-                        LoginSignupPrompt(onSignUp: onSignUp),
-                        const Spacer(),
+                        SizedBox(height: actionGap),
+                        LoginSignupPrompt(
+                          onSignUp: onSignUp,
+                          compact: compact,
+                        ),
+                        const SizedBox(height: AppSizes.xxxl),
                         const AuthDividerLabel(),
-                        const SizedBox(height: AppSizes.lg),
+                        SizedBox(height: AppSizes.xl),
                         SocialSignInButton(
                           label: l10n.continueWithGoogle,
                           onPressed: onGoogleSignIn,
+                          compact: compact,
                         ),
                       ],
                     ),

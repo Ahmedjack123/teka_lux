@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/theming/theming.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
-class LoginHeader extends StatelessWidget {
-  const LoginHeader({
+class ForgotPasswordHeader extends StatelessWidget {
+  const ForgotPasswordHeader({
     this.compact = false,
     super.key,
   });
@@ -18,23 +18,23 @@ class LoginHeader extends StatelessWidget {
     return Column(
       children: [
         Text(
-          l10n.loginTitle,
+          l10n.forgotPasswordTitle,
           textAlign: TextAlign.center,
           style: AppTextStyles.display.copyWith(
             color: AppColors.textStrong,
-            fontSize: compact ? 38 : 42,
+            fontSize: compact ? 32 : 38,
             height: 1.1,
             fontWeight: FontWeight.w700,
           ),
         ),
-        SizedBox(height: compact ? AppSizes.xxs : AppSizes.xs),
+        SizedBox(height: compact ? AppSizes.md : AppSizes.lg),
         Text(
-          l10n.loginSubtitle,
+          l10n.forgotPasswordDescription,
           textAlign: TextAlign.center,
           style: AppTextStyles.bodyLg.copyWith(
-            color: AppColors.textPrimary,
-            fontSize: compact ? 15 : 16,
-            height: 1.45,
+            color: AppColors.textBody,
+            fontSize: compact ? 15 : 17,
+            height: 1.55,
           ),
         ),
       ],

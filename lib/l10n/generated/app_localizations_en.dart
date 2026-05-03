@@ -81,10 +81,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueWithGoogle => 'Continue with Google';
 
   @override
-  String get registerTitle => 'Create account';
+  String get registerTitle => 'Start Your Luxe Wardrobe';
+
+  @override
+  String get registerSubtitle =>
+      'Create your account to save favorites and checkout faster.';
+
+  @override
+  String get fullNameHint => 'Full name';
+
+  @override
+  String get confirmPasswordHint => 'Confirm password';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
 
   @override
   String get forgotPasswordTitle => 'Forgot Password';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Enter the email address associated with your account, and we’ll send you a link to reset your password.';
+
+  @override
+  String get emailAddressHint => 'Email Address';
+
+  @override
+  String get sendResetLink => 'SEND RESET LINK';
+
+  @override
+  String get backToLogin => 'BACK TO LOGIN';
 
   @override
   String get genericErrorTitle => 'Something went wrong';

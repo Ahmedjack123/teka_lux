@@ -32,13 +32,15 @@ class AppRouter {
         path: RouteNames.loginPath,
         name: RouteNames.login,
         pageBuilder: (context, state) {
-          return _fadePage(state, const LoginPage());
+          return _fadeSlidePage(state, const LoginPage());
         },
       ),
       GoRoute(
         path: RouteNames.registerPath,
         name: RouteNames.register,
-        builder: (context, state) => const RegisterPage(),
+        pageBuilder: (context, state) {
+          return _fadeSlidePage(state, const RegisterPage());
+        },
       ),
       GoRoute(
         path: RouteNames.forgotPasswordPath,
@@ -55,8 +57,44 @@ class AppRouter {
     return CustomTransitionPage<void>(
       key: state.pageKey,
       child: child,
+      transitionDuration: const Duration(milliseconds: 360),
+      reverseTransitionDuration: const Duration(milliseconds: 240),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(opacity: animation, child: child);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+
+        return FadeTransition(opacity: curvedAnimation, child: child);
+      },
+    );
+  }
+
+  static CustomTransitionPage<void> _fadeSlidePage(
+    GoRouterState state,
+    Widget child,
+  ) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: const Duration(milliseconds: 460),
+      reverseTransitionDuration: const Duration(milliseconds: 280),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+        final offsetAnimation = Tween<Offset>(
+          begin: const Offset(.04, 0),
+          end: Offset.zero,
+        ).animate(curvedAnimation);
+
+        return FadeTransition(
+          opacity: curvedAnimation,
+          child: SlideTransition(position: offsetAnimation, child: child),
+        );
       },
     );
   }

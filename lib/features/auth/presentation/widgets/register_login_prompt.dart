@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../core/theming/theming.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
-class LoginSignupPrompt extends StatelessWidget {
-  const LoginSignupPrompt({
-    required this.onSignUp,
+class RegisterLoginPrompt extends StatelessWidget {
+  const RegisterLoginPrompt({
+    required this.onSignIn,
     this.compact = false,
     super.key,
   });
 
-  final VoidCallback onSignUp;
+  final VoidCallback onSignIn;
   final bool compact;
 
   @override
@@ -22,7 +22,7 @@ class LoginSignupPrompt extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
-          l10n.noAccount,
+          l10n.alreadyHaveAccount,
           style: AppTextStyles.bodyLg.copyWith(
             color: AppColors.textPrimary,
             fontSize: compact ? 14 : 15,
@@ -30,10 +30,10 @@ class LoginSignupPrompt extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: onSignUp,
+          onPressed: onSignIn,
           style: AppButtonStyles.ghost(),
           child: Text(
-            l10n.signUp,
+            l10n.signIn,
             style: AppTextStyles.label.copyWith(
               color: AppColors.primaryDark,
               fontSize: compact ? 14 : 15,

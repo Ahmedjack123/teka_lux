@@ -10,17 +10,19 @@ class SocialSignInButton extends StatelessWidget {
   const SocialSignInButton({
     required this.label,
     required this.onPressed,
+    this.compact = false,
     super.key,
   });
 
   final String label;
   final VoidCallback? onPressed;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 58,
+      height: compact ? 52 : 54,
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
@@ -31,9 +33,9 @@ class SocialSignInButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSizes.radiusPill),
           ),
           textStyle: AppTextStyles.label.copyWith(
-            fontSize: 15,
+            fontSize: compact ? 13 : 14,
             fontWeight: FontWeight.w700,
-            letterSpacing: 1.2,
+            letterSpacing: 1,
           ),
         ),
         child: Row(

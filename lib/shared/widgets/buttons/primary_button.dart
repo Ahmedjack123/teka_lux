@@ -9,6 +9,7 @@ class PrimaryButton extends StatelessWidget {
     this.isLoading = false,
     this.icon,
     this.fullWidth = true,
+    this.height,
     super.key,
   });
 
@@ -17,12 +18,13 @@ class PrimaryButton extends StatelessWidget {
   final bool isLoading;
   final IconData? icon;
   final bool fullWidth;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: fullWidth ? double.infinity : null,
-      height: AppSizes.buttonHeight,
+      height: height ?? AppSizes.buttonHeight,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: AppButtonStyles.primary(),
