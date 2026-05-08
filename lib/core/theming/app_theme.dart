@@ -11,7 +11,7 @@ class AppTheme {
     final scheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
       primary: AppColors.primary,
-      secondary: AppColors.primaryDark,
+      secondary: AppColors.accentWarm,
       surface: AppColors.surface,
       error: AppColors.error,
     );
@@ -40,6 +40,16 @@ class AppTheme {
           color: AppColors.textPrimary,
           fontSize: 18,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        selectedColor: AppColors.primary,
+        backgroundColor: AppColors.surfaceElevated,
+        disabledColor: AppColors.surface,
+        side: const BorderSide(color: AppColors.divider),
+        labelStyle: AppTextStyles.label.copyWith(color: AppColors.textPrimary),
+        secondaryLabelStyle: AppTextStyles.label.copyWith(
+          color: AppColors.textInverse,
         ),
       ),
       dividerTheme: const DividerThemeData(

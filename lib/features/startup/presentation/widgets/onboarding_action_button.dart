@@ -23,7 +23,7 @@ class OnboardingActionButton extends StatelessWidget {
     final foreground =
         isSecondary ? AppColors.textStrong : AppColors.textInverse;
     final background =
-        isSecondary ? const Color(0xFFF0ECE6) : AppColors.primary;
+        isSecondary ? AppColors.surfaceElevated : AppColors.primary;
 
     return SizedBox(
       width: double.infinity,
@@ -33,7 +33,7 @@ class OnboardingActionButton extends StatelessWidget {
         style: AppButtonStyles.filledPill(
           backgroundColor: background,
           foregroundColor: foreground,
-          letterSpacing: isSecondary ? 1.4 : .8,
+          letterSpacing: .2,
         ),
         child: isLoading
             ? SizedBox.square(

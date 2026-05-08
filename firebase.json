@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "teka-luxe",
+          "appId": "1:640195549107:android:893c326c67e3cf3f23ddc6",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "teka-luxe",
+          "appId": "1:640195549107:ios:3feb532bc1ed19c523ddc6",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "teka-luxe",
+          "configurations": {
+            "android": "1:640195549107:android:893c326c67e3cf3f23ddc6",
+            "ios": "1:640195549107:ios:3feb532bc1ed19c523ddc6"
+          }
+        }
+      }
+    }
+  }
+}

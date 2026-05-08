@@ -9,18 +9,22 @@ class AppButtonStyles {
 
   static ButtonStyle primary({
     double radius = AppSizes.radiusLg,
-    double fontSize = 16,
+    double fontSize = 15,
   }) {
     return ElevatedButton.styleFrom(
       backgroundColor: AppColors.primary,
       disabledBackgroundColor: AppColors.primarySoft.withValues(alpha: .45),
       foregroundColor: AppColors.textInverse,
       disabledForegroundColor: AppColors.textInverse.withValues(alpha: .72),
-      elevation: 0,
+      elevation: 1,
+      shadowColor: AppColors.primary.withValues(alpha: .24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
-      textStyle: AppTextStyles.label.copyWith(fontSize: fontSize),
+      textStyle: AppTextStyles.label.copyWith(
+        fontSize: fontSize,
+        letterSpacing: .2,
+      ),
     );
   }
 
@@ -29,9 +33,10 @@ class AppButtonStyles {
     double fontSize = 16,
   }) {
     return OutlinedButton.styleFrom(
-      foregroundColor: AppColors.primaryDark,
+      backgroundColor: AppColors.surfaceElevated,
+      foregroundColor: AppColors.textStrong,
       disabledForegroundColor: AppColors.textSecondary,
-      side: const BorderSide(color: AppColors.primary, width: 1.2),
+      side: const BorderSide(color: AppColors.textStrong, width: 1.2),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
@@ -44,7 +49,7 @@ class AppButtonStyles {
     double fontSize = 15,
   }) {
     return TextButton.styleFrom(
-      foregroundColor: AppColors.primaryDark,
+      foregroundColor: AppColors.primary,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
@@ -59,7 +64,8 @@ class AppButtonStyles {
     double letterSpacing = .8,
   }) {
     return ElevatedButton.styleFrom(
-      elevation: 0,
+      elevation: 1,
+      shadowColor: backgroundColor.withValues(alpha: .2),
       backgroundColor: backgroundColor,
       disabledBackgroundColor: backgroundColor.withValues(alpha: .55),
       foregroundColor: foregroundColor,

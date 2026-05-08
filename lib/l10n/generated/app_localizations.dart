@@ -250,6 +250,12 @@ abstract class AppLocalizations {
   /// **'Full name'**
   String get fullNameHint;
 
+  /// No description provided for @phoneNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get phoneNumberHint;
+
   /// No description provided for @confirmPasswordHint.
   ///
   /// In en, this message translates to:
@@ -297,6 +303,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'BACK TO LOGIN'**
   String get backToLogin;
+
+  /// No description provided for @authErrorAccountExistsWithDifferentCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'An account already exists with a different sign-in method.'**
+  String get authErrorAccountExistsWithDifferentCredential;
+
+  /// No description provided for @authErrorCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in was cancelled.'**
+  String get authErrorCancelled;
+
+  /// No description provided for @authErrorCredentialAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in method is already connected to another account.'**
+  String get authErrorCredentialAlreadyInUse;
+
+  /// No description provided for @authErrorEmailAlreadyInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered. Try signing in instead.'**
+  String get authErrorEmailAlreadyInUse;
+
+  /// No description provided for @authErrorExpiredActionCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This reset link has expired. Request a new one and try again.'**
+  String get authErrorExpiredActionCode;
+
+  /// No description provided for @authErrorInvalidActionCode.
+  ///
+  /// In en, this message translates to:
+  /// **'This reset link is invalid or has already been used.'**
+  String get authErrorInvalidActionCode;
+
+  /// No description provided for @authErrorInvalidCredential.
+  ///
+  /// In en, this message translates to:
+  /// **'The email or password is incorrect.'**
+  String get authErrorInvalidCredential;
+
+  /// No description provided for @authErrorInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get authErrorInvalidEmail;
+
+  /// No description provided for @authErrorInvalidVerificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification code is invalid.'**
+  String get authErrorInvalidVerificationCode;
+
+  /// No description provided for @authErrorInvalidVerificationId.
+  ///
+  /// In en, this message translates to:
+  /// **'The verification session is invalid. Please try again.'**
+  String get authErrorInvalidVerificationId;
+
+  /// No description provided for @authErrorMissingEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address to continue.'**
+  String get authErrorMissingEmail;
+
+  /// No description provided for @authErrorNetworkRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and try again.'**
+  String get authErrorNetworkRequestFailed;
+
+  /// No description provided for @authErrorOperationNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in method is not available right now.'**
+  String get authErrorOperationNotAllowed;
+
+  /// No description provided for @authErrorProfileSyncInvalidSchema.
+  ///
+  /// In en, this message translates to:
+  /// **'The users table does not match the app profile data.'**
+  String get authErrorProfileSyncInvalidSchema;
+
+  /// No description provided for @authErrorProfileSyncPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Supabase is blocking profile saves. Check the users table RLS policies.'**
+  String get authErrorProfileSyncPermissionDenied;
+
+  /// No description provided for @authErrorProfileSyncUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your profile right now. Please try again.'**
+  String get authErrorProfileSyncUnavailable;
+
+  /// No description provided for @authErrorProviderAlreadyLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'This sign-in method is already linked to your account.'**
+  String get authErrorProviderAlreadyLinked;
+
+  /// No description provided for @authErrorRequiresRecentLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again before making this change.'**
+  String get authErrorRequiresRecentLogin;
+
+  /// No description provided for @authErrorTooManyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please wait a moment and try again.'**
+  String get authErrorTooManyRequests;
+
+  /// No description provided for @authErrorUserDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been disabled. Contact support for help.'**
+  String get authErrorUserDisabled;
+
+  /// No description provided for @authErrorUserNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not find an account with that email.'**
+  String get authErrorUserNotFound;
+
+  /// No description provided for @authErrorWeakPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a stronger password to continue.'**
+  String get authErrorWeakPassword;
+
+  /// No description provided for @authErrorWrongPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'The password is incorrect.'**
+  String get authErrorWrongPassword;
+
+  /// No description provided for @authErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'We could not complete the request. Please try again.'**
+  String get authErrorUnknown;
+
+  /// No description provided for @validationNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your full name.'**
+  String get validationNameRequired;
+
+  /// No description provided for @validationPhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number.'**
+  String get validationPhoneRequired;
+
+  /// No description provided for @validationPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a Libyan mobile number starting with 091, 092, 093, or 094.'**
+  String get validationPhoneInvalid;
+
+  /// No description provided for @validationEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address.'**
+  String get validationEmailRequired;
+
+  /// No description provided for @validationEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get validationEmailInvalid;
+
+  /// No description provided for @validationPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password.'**
+  String get validationPasswordRequired;
+
+  /// No description provided for @validationPasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 6 characters.'**
+  String get validationPasswordMinLength;
+
+  /// No description provided for @validationConfirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your password.'**
+  String get validationConfirmPasswordRequired;
+
+  /// No description provided for @validationPasswordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get validationPasswordsDoNotMatch;
+
+  /// No description provided for @emailVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Your Email'**
+  String get emailVerificationTitle;
+
+  /// No description provided for @emailVerificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a verification link to your email. Open it, then return here and we’ll continue automatically.'**
+  String get emailVerificationDescription;
+
+  /// No description provided for @emailVerificationChecking.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking verification status...'**
+  String get emailVerificationChecking;
+
+  /// No description provided for @emailVerificationResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Email'**
+  String get emailVerificationResend;
+
+  /// No description provided for @emailVerificationResendCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String emailVerificationResendCountdown(int seconds);
+
+  /// No description provided for @emailVerificationBackToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Login'**
+  String get emailVerificationBackToLogin;
+
+  /// No description provided for @emailVerificationSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification email sent.'**
+  String get emailVerificationSent;
+
+  /// No description provided for @emailVerificationSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Verified'**
+  String get emailVerificationSuccessTitle;
+
+  /// No description provided for @emailVerificationSuccessDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is active. Continue to Teka Luxe.'**
+  String get emailVerificationSuccessDescription;
+
+  /// No description provided for @emailVerificationNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get emailVerificationNext;
+
+  /// No description provided for @passwordResetEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset email sent.'**
+  String get passwordResetEmailSent;
+
+  /// No description provided for @homePlaceholderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get homePlaceholderTitle;
+
+  /// No description provided for @homePlaceholderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Teka Luxe shop experience will appear here.'**
+  String get homePlaceholderSubtitle;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logout;
 
   /// No description provided for @genericErrorTitle.
   ///

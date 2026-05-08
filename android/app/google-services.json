@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "640195549107",
+    "project_id": "teka-luxe",
+    "storage_bucket": "teka-luxe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640195549107:android:893c326c67e3cf3f23ddc6",
+        "android_client_info": {
+          "package_name": "com.tekaluxe.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640195549107-ihpetiktqo7uagh8s2ddmacd7edf3th8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tekaluxe.app",
+            "certificate_hash": "b869f04869f0eaaec8a47cfffe22b51c60e750d2"
+          }
+        },
+        {
+          "client_id": "640195549107-055vdjul9g50v65vbh5ecfsiv2q73uau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfMZh-pjGZwzTk6t75ao52WrSBKwKGoKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "640195549107-055vdjul9g50v65vbh5ecfsiv2q73uau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "640195549107-e97c4mtdtodjaomjkko7eradju80f0re.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tekaluxe.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

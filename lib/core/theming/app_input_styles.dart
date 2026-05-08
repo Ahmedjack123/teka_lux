@@ -10,11 +10,13 @@ class AppInputStyles {
   static InputDecorationTheme theme() {
     return InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.surface,
+      fillColor: AppColors.inputFill,
       border: _border(),
-      enabledBorder: _border(),
+      enabledBorder: _border(
+        borderSide: const BorderSide(color: AppColors.divider, width: 1),
+      ),
       focusedBorder: _border(
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: _border(
         borderSide: const BorderSide(color: AppColors.error, width: 1.2),
@@ -24,7 +26,7 @@ class AppInputStyles {
       ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: AppSizes.md,
-        vertical: 18,
+        vertical: 17,
       ),
       hintStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
       errorStyle: AppTextStyles.caption.copyWith(color: AppColors.error),
