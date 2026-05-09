@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart'
 
 import '../../../../core/errors/auth_error_code.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../core/errors/supabase_exceptions.dart';
 import '../models/user_model.dart';
 
 abstract interface class AuthRemoteDatasource {
@@ -75,9 +76,24 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
         email: email.trim(),
         password: password,
       );
-      return _modelFromCredential(credential);
+      final model = _modelFromCredential(credential);
+
+      try {
+        await _upsertUserProfile(
+          model,
+          fullName: model.name,
+          phoneNumber: model.phoneNumber,
+        );
+      } on Object {
+        await _signOutAfterProfileSyncFailure();
+        rethrow;
+      }
+
+      return model;
     } on FirebaseAuthException catch (exception) {
       throw AuthException.fromFirebase(exception);
+    } on PostgrestException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
 
@@ -119,7 +135,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     } on FirebaseAuthException catch (exception) {
       throw AuthException.fromFirebase(exception);
     } on PostgrestException catch (exception, stackTrace) {
-      throw _authExceptionFromPostgrestException(exception, stackTrace);
+      throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
 
@@ -155,17 +171,22 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
       );
 
       final model = _modelFromCredential(firebaseCredential);
-      await _upsertUserProfile(
-        model,
-        fullName: model.name,
-        phoneNumber: model.phoneNumber,
-      );
+      try {
+        await _upsertUserProfile(
+          model,
+          fullName: model.name,
+          phoneNumber: model.phoneNumber,
+        );
+      } on Object {
+        await _signOutAfterProfileSyncFailure(includeGoogle: true);
+        rethrow;
+      }
 
       return model;
     } on FirebaseAuthException catch (exception) {
       throw AuthException.fromFirebase(exception);
     } on PostgrestException catch (exception, stackTrace) {
-      throw _authExceptionFromPostgrestException(exception, stackTrace);
+      throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     } on GoogleSignInException catch (exception, stackTrace) {
       throw AuthException(
         errorCode: _mapGoogleSignInError(exception),
@@ -232,7 +253,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     } on FirebaseAuthException catch (exception) {
       throw AuthException.fromFirebase(exception);
     } on PostgrestException catch (exception, stackTrace) {
-      throw _authExceptionFromPostgrestException(exception, stackTrace);
+      throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
 
@@ -313,7 +334,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
         }, onConflict: 'id');
         return;
       } on PostgrestException catch (exception) {
-        if (!_isInvalidRoleException(exception)) {
+        if (!SupabaseExceptionMapper.isInvalidRole(exception)) {
           rethrow;
         }
 
@@ -324,77 +345,13 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     try {
       await supabase.from('users').upsert(payload, onConflict: 'id');
     } on PostgrestException catch (exception) {
-      if (invalidRoleException != null && _isMissingRoleException(exception)) {
+      if (invalidRoleException != null &&
+          SupabaseExceptionMapper.isMissingRole(exception)) {
         throw invalidRoleException;
       }
 
       rethrow;
     }
-  }
-
-  AuthException _authExceptionFromPostgrestException(
-    PostgrestException exception,
-    StackTrace stackTrace,
-  ) {
-    final errorCode = _mapPostgrestError(exception);
-
-    return AuthException(
-      errorCode: errorCode,
-      firebaseCode: exception.code ?? errorCode.firebaseCode,
-      debugMessage: exception.message,
-      cause: exception,
-      stackTrace: stackTrace,
-    );
-  }
-
-  AuthErrorCode _mapPostgrestError(PostgrestException exception) {
-    if (_isPermissionException(exception)) {
-      return AuthErrorCode.profileSyncPermissionDenied;
-    }
-
-    if (_isSchemaException(exception)) {
-      return AuthErrorCode.profileSyncInvalidSchema;
-    }
-
-    return AuthErrorCode.profileSyncUnavailable;
-  }
-
-  bool _isInvalidRoleException(PostgrestException exception) {
-    final text = _exceptionText(exception);
-    return exception.code == '22P02' &&
-        (text.contains('user_role') ||
-            text.contains('invalid input value for enum'));
-  }
-
-  bool _isMissingRoleException(PostgrestException exception) {
-    final text = _exceptionText(exception);
-    return exception.code == '23502' && text.contains('role');
-  }
-
-  bool _isPermissionException(PostgrestException exception) {
-    final text = _exceptionText(exception);
-    return exception.code == '42501' ||
-        text.contains('row-level security') ||
-        text.contains('permission denied');
-  }
-
-  bool _isSchemaException(PostgrestException exception) {
-    final text = _exceptionText(exception);
-    return exception.code == '22P02' ||
-        exception.code == '23502' ||
-        exception.code == '42703' ||
-        text.contains('invalid input value for enum') ||
-        text.contains('violates not-null constraint') ||
-        text.contains('column');
-  }
-
-  String _exceptionText(PostgrestException exception) {
-    return [
-      exception.message,
-      exception.code,
-      exception.details,
-      exception.hint,
-    ].whereType<Object>().join(' ').toLowerCase();
   }
 
   Future<void> _deleteCreatedUser(User user) async {
@@ -403,6 +360,20 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     } on FirebaseAuthException {
       // Keep the original profile-save error. The next attempt may need cleanup
       // from Firebase Console if this recovery delete fails.
+    }
+  }
+
+  Future<void> _signOutAfterProfileSyncFailure({
+    bool includeGoogle = false,
+  }) async {
+    try {
+      await _firebaseAuth.signOut();
+      if (includeGoogle) {
+        await _ensureGoogleSignInInitialized();
+        await _googleSignIn.signOut();
+      }
+    } on Object {
+      // Keep the original Supabase profile-save error.
     }
   }
 
