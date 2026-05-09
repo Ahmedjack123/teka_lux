@@ -568,6 +568,12 @@ abstract class AppLocalizations {
   /// **'Password reset email sent.'**
   String get passwordResetEmailSent;
 
+  /// No description provided for @passwordResetResendCountdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Send again in {seconds}s'**
+  String passwordResetResendCountdown(int seconds);
+
   /// No description provided for @homePlaceholderTitle.
   ///
   /// In en, this message translates to:

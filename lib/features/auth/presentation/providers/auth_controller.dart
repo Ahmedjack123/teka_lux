@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/storage_keys.dart';
@@ -297,8 +299,15 @@ final class RegisterFormController extends Notifier<RegisterFormState> {
 
 final class ForgotPasswordFormController
     extends Notifier<ForgotPasswordFormState> {
+  static const int _resendCooldownSeconds = 60;
+
+  Timer? _cooldownTimer;
+
   @override
-  ForgotPasswordFormState build() => const ForgotPasswordFormState();
+  ForgotPasswordFormState build() {
+    ref.onDispose(() => _cooldownTimer?.cancel());
+    return const ForgotPasswordFormState();
+  }
 
   void emailChanged(String value, AppLocalizations l10n) {
     state = state.copyWith(
@@ -310,7 +319,7 @@ final class ForgotPasswordFormController
   }
 
   Future<bool> submit(AppLocalizations l10n) async {
-    if (state.isSubmitting) {
+    if (!state.canSubmit) {
       return false;
     }
 
@@ -341,8 +350,25 @@ final class ForgotPasswordFormController
       state = state.copyWith(
         isSubmitting: false,
         successMessage: l10n.passwordResetEmailSent,
+        resendSecondsRemaining: _resendCooldownSeconds,
       );
+      _startResendCooldown();
       return true;
+    });
+  }
+
+  void _startResendCooldown() {
+    _cooldownTimer?.cancel();
+    _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      final secondsRemaining = state.resendSecondsRemaining;
+
+      if (secondsRemaining <= 1) {
+        timer.cancel();
+        state = state.copyWith(resendSecondsRemaining: 0);
+        return;
+      }
+
+      state = state.copyWith(resendSecondsRemaining: secondsRemaining - 1);
     });
   }
 }

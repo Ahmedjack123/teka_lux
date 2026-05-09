@@ -14,6 +14,7 @@ class ForgotPasswordScaffold extends StatelessWidget {
     this.emailError,
     this.errorMessage,
     this.successMessage,
+    this.resendSecondsRemaining = 0,
     this.isSubmitting = false,
     super.key,
   });
@@ -25,6 +26,7 @@ class ForgotPasswordScaffold extends StatelessWidget {
   final String? emailError;
   final String? errorMessage;
   final String? successMessage;
+  final int resendSecondsRemaining;
   final bool isSubmitting;
 
   @override
@@ -67,6 +69,7 @@ class ForgotPasswordScaffold extends StatelessWidget {
                           emailError: emailError,
                           errorMessage: errorMessage,
                           successMessage: successMessage,
+                          resendSecondsRemaining: resendSecondsRemaining,
                           isSubmitting: isSubmitting,
                           compact: compact,
                         ),

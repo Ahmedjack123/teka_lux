@@ -275,6 +275,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordResetEmailSent => 'Password reset email sent.';
 
   @override
+  String passwordResetResendCountdown(int seconds) {
+    return 'Send again in ${seconds}s';
+  }
+
+  @override
   String get homePlaceholderTitle => 'Home';
 
   @override

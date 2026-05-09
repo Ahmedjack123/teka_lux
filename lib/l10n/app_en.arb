@@ -90,6 +90,15 @@
   "emailVerificationSuccessDescription": "Your account is active. Continue to Teka Luxe.",
   "emailVerificationNext": "Next",
   "passwordResetEmailSent": "Password reset email sent.",
+  "passwordResetResendCountdown": "Send again in {seconds}s",
+  "@passwordResetResendCountdown": {
+    "placeholders": {
+      "seconds": {
+        "type": "int",
+        "example": "60"
+      }
+    }
+  },
   "homePlaceholderTitle": "Home",
   "homePlaceholderSubtitle": "Your Teka Luxe shop experience will appear here.",
   "logout": "Log Out",

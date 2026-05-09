@@ -148,6 +148,7 @@ final class ForgotPasswordFormState {
     this.emailError,
     this.errorMessage,
     this.successMessage,
+    this.resendSecondsRemaining = 0,
     this.isSubmitting = false,
   });
 
@@ -155,13 +156,17 @@ final class ForgotPasswordFormState {
   final String? emailError;
   final String? errorMessage;
   final String? successMessage;
+  final int resendSecondsRemaining;
   final bool isSubmitting;
+
+  bool get canSubmit => !isSubmitting && resendSecondsRemaining == 0;
 
   ForgotPasswordFormState copyWith({
     String? email,
     Object? emailError = _unset,
     Object? errorMessage = _unset,
     Object? successMessage = _unset,
+    int? resendSecondsRemaining,
     bool? isSubmitting,
   }) {
     return ForgotPasswordFormState(
@@ -175,6 +180,8 @@ final class ForgotPasswordFormState {
       successMessage: identical(successMessage, _unset)
           ? this.successMessage
           : successMessage as String?,
+      resendSecondsRemaining:
+          resendSecondsRemaining ?? this.resendSecondsRemaining,
       isSubmitting: isSubmitting ?? this.isSubmitting,
     );
   }

@@ -40,6 +40,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       emailError: state.emailError,
       errorMessage: state.errorMessage,
       successMessage: state.successMessage,
+      resendSecondsRemaining: state.resendSecondsRemaining,
       isSubmitting: state.isSubmitting,
       onEmailChanged: (value) => controller.emailChanged(value, l10n),
       onSubmit: () => controller.submit(l10n),

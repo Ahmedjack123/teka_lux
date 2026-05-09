@@ -11,6 +11,7 @@ class ForgotPasswordForm extends StatelessWidget {
     this.emailError,
     this.errorMessage,
     this.successMessage,
+    this.resendSecondsRemaining = 0,
     this.isSubmitting = false,
     this.compact = false,
     super.key,
@@ -22,12 +23,17 @@ class ForgotPasswordForm extends StatelessWidget {
   final String? emailError;
   final String? errorMessage;
   final String? successMessage;
+  final int resendSecondsRemaining;
   final bool isSubmitting;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final canSubmit = !isSubmitting && resendSecondsRemaining == 0;
+    final submitLabel = resendSecondsRemaining > 0
+        ? l10n.passwordResetResendCountdown(resendSecondsRemaining)
+        : l10n.sendResetLink;
 
     return Column(
       children: [
@@ -89,7 +95,7 @@ class ForgotPasswordForm extends StatelessWidget {
           width: double.infinity,
           height: compact ? 54 : 58,
           child: ElevatedButton(
-            onPressed: isSubmitting ? null : onSubmit,
+            onPressed: canSubmit ? onSubmit : null,
             style: AppButtonStyles.filledPill(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.textInverse,
@@ -109,7 +115,7 @@ class ForgotPasswordForm extends StatelessWidget {
                       color: AppColors.textInverse,
                     ),
                   )
-                : Text(l10n.sendResetLink),
+                : Text(submitLabel),
           ),
         ),
       ],
