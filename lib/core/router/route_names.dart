@@ -8,6 +8,7 @@ class RouteNames {
   static const register = 'register';
   static const forgotPassword = 'forgot-password';
   static const verifyEmail = 'verify-email';
+  static const verifyEmailSuccess = 'verify-email-success';
 
   static const startupPath = '/';
   static const homePath = '/home';
@@ -16,4 +17,5 @@ class RouteNames {
   static const registerPath = '/register';
   static const forgotPasswordPath = '/forgot-password';
   static const verifyEmailPath = '/verify-email';
+  static const verifyEmailSuccessPath = '/verify-email/success';
 }

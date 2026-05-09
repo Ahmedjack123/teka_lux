@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../l10n/generated/app_localizations.dart';
 import 'auth_error_code.dart';
 import 'failures.dart';
@@ -21,21 +19,11 @@ abstract class AppException implements Exception {
 final class AuthException extends AppException {
   const AuthException({
     required this.errorCode,
-    this.firebaseCode,
+    this.authCode,
     super.debugMessage,
     super.cause,
     super.stackTrace,
   });
-
-  factory AuthException.fromFirebase(FirebaseAuthException exception) {
-    return AuthException(
-      errorCode: AuthErrorCode.fromFirebaseCode(exception.code),
-      firebaseCode: exception.code,
-      debugMessage: exception.message,
-      cause: exception,
-      stackTrace: exception.stackTrace,
-    );
-  }
 
   factory AuthException.fromCode(
     String? code, {
@@ -44,8 +32,8 @@ final class AuthException extends AppException {
     StackTrace? stackTrace,
   }) {
     return AuthException(
-      errorCode: AuthErrorCode.fromFirebaseCode(code),
-      firebaseCode: code,
+      errorCode: AuthErrorCode.fromCode(code),
+      authCode: code,
       debugMessage: debugMessage,
       cause: cause,
       stackTrace: stackTrace,
@@ -53,12 +41,12 @@ final class AuthException extends AppException {
   }
 
   final AuthErrorCode errorCode;
-  final String? firebaseCode;
+  final String? authCode;
 
   AuthFailure toFailure() {
     return AuthFailure(
       errorCode: errorCode,
-      firebaseCode: firebaseCode,
+      authCode: authCode,
       debugMessage: debugMessage,
       cause: cause,
       stackTrace: stackTrace,
@@ -72,6 +60,6 @@ final class AuthException extends AppException {
 
   @override
   String toString() {
-    return 'AuthException(firebaseCode: ${firebaseCode ?? errorCode.firebaseCode})';
+    return 'AuthException(authCode: ${authCode ?? errorCode.code})';
   }
 }

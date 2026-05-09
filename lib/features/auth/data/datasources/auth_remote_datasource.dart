@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:supabase_flutter/supabase_flutter.dart'
-    show PostgrestException, SupabaseClient;
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
+import '../../../../core/config/supabase_config.dart';
 import '../../../../core/errors/auth_error_code.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/supabase_exceptions.dart';
@@ -37,37 +36,43 @@ abstract interface class AuthRemoteDatasource {
   Future<void> signOut();
 }
 
-final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
-  FirebaseAuthRemoteDatasource({
-    required FirebaseAuth firebaseAuth,
-    required SupabaseClient? supabaseClient,
+final class SupabaseAuthRemoteDatasource implements AuthRemoteDatasource {
+  SupabaseAuthRemoteDatasource({
+    required supabase.SupabaseClient? supabaseClient,
     required NetworkInfo networkInfo,
     required GoogleSignIn googleSignIn,
-  })  : _firebaseAuth = firebaseAuth,
-        _supabaseClient = supabaseClient,
+  })  : _supabaseClient = supabaseClient,
         _networkInfo = networkInfo,
         _googleSignIn = googleSignIn;
 
-  final FirebaseAuth _firebaseAuth;
-  final SupabaseClient? _supabaseClient;
+  final supabase.SupabaseClient? _supabaseClient;
   final NetworkInfo _networkInfo;
   final GoogleSignIn _googleSignIn;
 
   static const List<String> _roleCandidates = ['customer', 'user'];
 
+  String? _pendingVerificationEmail;
+  String? _pendingVerificationName;
+  String? _pendingVerificationPhoneNumber;
   Future<void>? _googleSignInInitialization;
 
   @override
   Stream<UserModel?> authStateChanges() {
-    return _firebaseAuth.userChanges().map((user) {
-      return user == null ? null : UserModel.fromFirebaseUser(user);
+    final client = _supabaseClient;
+    if (client == null) {
+      return Stream<UserModel?>.value(null);
+    }
+
+    return client.auth.onAuthStateChange.map((state) {
+      final user = state.session?.user ?? client.auth.currentUser;
+      return user == null ? null : UserModel.fromSupabaseUser(user);
     });
   }
 
   @override
   Future<UserModel?> getCurrentUser() async {
-    final user = _firebaseAuth.currentUser;
-    return user == null ? null : UserModel.fromFirebaseUser(user);
+    final user = _supabaseClient?.auth.currentUser;
+    return user == null ? null : UserModel.fromSupabaseUser(user);
   }
 
   @override
@@ -75,29 +80,29 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     required String email,
     required String password,
   }) async {
+    final normalizedEmail = email.trim().toLowerCase();
+
     try {
       await _ensureNetworkConnected();
-      final credential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email.trim(),
+      final client = _requireSupabaseClient();
+      final response = await client.auth.signInWithPassword(
+        email: normalizedEmail,
         password: password,
       );
-      final model = _modelFromCredential(credential);
+      final model = _modelFromSupabaseUser(response.user);
 
-      try {
-        await _upsertUserProfile(
-          model,
-          fullName: model.name,
-          phoneNumber: model.phoneNumber,
-        );
-      } on Object {
-        await _signOutAfterProfileSyncFailure();
-        rethrow;
-      }
+      await _upsertUserProfile(model);
 
       return model;
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
-    } on PostgrestException catch (exception, stackTrace) {
+    } on supabase.AuthException catch (exception, stackTrace) {
+      if (_isEmailNotConfirmed(exception)) {
+        _setPendingVerificationEmail(email: normalizedEmail);
+        return UserModel.pendingEmailVerification(email: normalizedEmail);
+      }
+
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
+    } on supabase.PostgrestException catch (exception, stackTrace) {
+      await _signOutAfterProfileSyncFailure();
       throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
@@ -109,38 +114,45 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     required String name,
     required String phoneNumber,
   }) async {
+    final normalizedEmail = email.trim().toLowerCase();
+    final normalizedName = name.trim();
+    final normalizedPhoneNumber = phoneNumber.trim();
+
     try {
       await _ensureNetworkConnected();
-      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email.trim(),
+      final client = _requireSupabaseClient();
+      final response = await client.auth.signUp(
+        email: normalizedEmail,
         password: password,
+        emailRedirectTo: SupabaseConfig.authRedirectUrl,
+        data: <String, dynamic>{
+          'full_name': normalizedName,
+          'phone_number': normalizedPhoneNumber,
+        },
       );
-      final user = credential.user;
+      final model = _modelFromSupabaseUser(
+        response.user,
+        nameOverride: normalizedName,
+        phoneNumberOverride: normalizedPhoneNumber,
+      );
 
-      if (user == null) {
-        throw const AuthException(errorCode: AuthErrorCode.unknown);
-      }
+      _setPendingVerificationEmail(
+        email: normalizedEmail,
+        name: normalizedName,
+        phoneNumber: normalizedPhoneNumber,
+      );
 
-      await user.updateDisplayName(name.trim());
-      await user.reload();
-
-      final model =
-          UserModel.fromFirebaseUser(_firebaseAuth.currentUser ?? user);
       try {
-        await _upsertUserProfile(
-          model,
-          fullName: name.trim(),
-          phoneNumber: phoneNumber.trim(),
-        );
+        await _upsertUserProfile(model);
       } on Object {
-        await _deleteCreatedUser(user);
+        await _signOutAfterProfileSyncFailure();
         rethrow;
       }
 
       return model;
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
-    } on PostgrestException catch (exception, stackTrace) {
+    } on supabase.AuthException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
+    } on supabase.PostgrestException catch (exception, stackTrace) {
       throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
@@ -154,7 +166,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
       if (!_googleSignIn.supportsAuthenticate()) {
         throw const AuthException(
           errorCode: AuthErrorCode.operationNotAllowed,
-          firebaseCode: 'operation-not-allowed',
+          authCode: 'operation-not-allowed',
           debugMessage:
               'Interactive Google sign-in is not supported on this platform.',
         );
@@ -167,37 +179,34 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
       if (idToken == null || idToken.isEmpty) {
         throw const AuthException(
           errorCode: AuthErrorCode.invalidCredential,
-          firebaseCode: 'invalid-credential',
+          authCode: 'invalid-credential',
           debugMessage: 'Google sign-in did not return an idToken.',
         );
       }
 
-      final credential = GoogleAuthProvider.credential(idToken: idToken);
-      final firebaseCredential = await _firebaseAuth.signInWithCredential(
-        credential,
+      final client = _requireSupabaseClient();
+      final response = await client.auth.signInWithIdToken(
+        provider: supabase.OAuthProvider.google,
+        idToken: idToken,
       );
+      final model = _modelFromSupabaseUser(response.user);
 
-      final model = _modelFromCredential(firebaseCredential);
       try {
-        await _upsertUserProfile(
-          model,
-          fullName: model.name,
-          phoneNumber: model.phoneNumber,
-        );
+        await _upsertUserProfile(model);
       } on Object {
         await _signOutAfterProfileSyncFailure(includeGoogle: true);
         rethrow;
       }
 
       return model;
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
-    } on PostgrestException catch (exception, stackTrace) {
+    } on supabase.AuthException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
+    } on supabase.PostgrestException catch (exception, stackTrace) {
       throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     } on GoogleSignInException catch (exception, stackTrace) {
       throw AuthException(
         errorCode: _mapGoogleSignInError(exception),
-        firebaseCode: exception.code.name,
+        authCode: exception.code.name,
         debugMessage: exception.description,
         cause: exception,
         stackTrace: stackTrace,
@@ -209,9 +218,12 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _ensureNetworkConnected();
-      await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
+      await _requireSupabaseClient().auth.resetPasswordForEmail(
+            email.trim().toLowerCase(),
+            redirectTo: SupabaseConfig.authRedirectUrl,
+          );
+    } on supabase.AuthException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
     }
   }
 
@@ -219,18 +231,22 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   Future<void> verifyEmail() async {
     try {
       await _ensureNetworkConnected();
-      final user = _firebaseAuth.currentUser;
+      final email = _verificationEmail;
 
-      if (user == null) {
+      if (email == null) {
         throw const AuthException(
-          errorCode: AuthErrorCode.userNotFound,
-          firebaseCode: 'user-not-found',
+          errorCode: AuthErrorCode.missingEmail,
+          authCode: 'missing-email',
         );
       }
 
-      await user.sendEmailVerification();
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
+      await _requireSupabaseClient().auth.resend(
+            email: email,
+            type: supabase.OtpType.signup,
+            emailRedirectTo: SupabaseConfig.authRedirectUrl,
+          );
+    } on supabase.AuthException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
     }
   }
 
@@ -238,31 +254,39 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   Future<bool> isCurrentUserEmailVerified() async {
     try {
       await _ensureNetworkConnected();
-      final user = _firebaseAuth.currentUser;
+      final client = _requireSupabaseClient();
 
-      if (user == null) {
-        throw const AuthException(
-          errorCode: AuthErrorCode.userNotFound,
-          firebaseCode: 'user-not-found',
-        );
+      if (client.auth.currentSession == null) {
+        return false;
       }
 
-      await user.reload();
-      final refreshedUser = _firebaseAuth.currentUser;
-      final isVerified = refreshedUser?.emailVerified ?? false;
+      final response = await client.auth.getUser();
+      final user = response.user;
 
-      if (isVerified && refreshedUser != null) {
-        await _upsertUserProfile(
-          UserModel.fromFirebaseUser(refreshedUser),
-          fullName: refreshedUser.displayName,
-          phoneNumber: refreshedUser.phoneNumber,
-        );
+      if (user == null) {
+        return false;
+      }
+
+      final model = UserModel.fromSupabaseUser(
+        user,
+        nameOverride: _pendingVerificationName,
+        phoneNumberOverride: _pendingVerificationPhoneNumber,
+      );
+      final isVerified = model.emailVerified;
+
+      if (isVerified) {
+        await _upsertUserProfile(model);
+        _clearPendingVerificationEmail();
       }
 
       return isVerified;
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
-    } on PostgrestException catch (exception, stackTrace) {
+    } on supabase.AuthException catch (exception, stackTrace) {
+      if (exception is supabase.AuthSessionMissingException) {
+        return false;
+      }
+
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
+    } on supabase.PostgrestException catch (exception, stackTrace) {
       throw SupabaseExceptionMapper.toAuthException(exception, stackTrace);
     }
   }
@@ -270,15 +294,19 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   @override
   Future<void> signOut() async {
     try {
-      await _firebaseAuth.signOut();
+      final client = _supabaseClient;
+      if (client != null) {
+        await client.auth.signOut();
+      }
       await _ensureGoogleSignInInitialized();
       await _googleSignIn.signOut();
-    } on FirebaseAuthException catch (exception) {
-      throw AuthException.fromFirebase(exception);
+      _clearPendingVerificationEmail();
+    } on supabase.AuthException catch (exception, stackTrace) {
+      throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
     } on GoogleSignInException catch (exception, stackTrace) {
       throw AuthException(
         errorCode: _mapGoogleSignInError(exception),
-        firebaseCode: exception.code.name,
+        authCode: exception.code.name,
         debugMessage: exception.description,
         cause: exception,
         stackTrace: stackTrace,
@@ -290,14 +318,33 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     return _googleSignInInitialization ??= _googleSignIn.initialize();
   }
 
-  UserModel _modelFromCredential(UserCredential credential) {
-    final user = credential.user;
+  supabase.SupabaseClient _requireSupabaseClient() {
+    final client = _supabaseClient;
+    if (client != null) {
+      return client;
+    }
 
+    throw const AuthException(
+      errorCode: AuthErrorCode.profileSyncUnavailable,
+      authCode: 'supabase-not-configured',
+      debugMessage: 'Supabase is not configured.',
+    );
+  }
+
+  UserModel _modelFromSupabaseUser(
+    supabase.User? user, {
+    String? nameOverride,
+    String? phoneNumberOverride,
+  }) {
     if (user == null) {
       throw const AuthException(errorCode: AuthErrorCode.unknown);
     }
 
-    return UserModel.fromFirebaseUser(user);
+    return UserModel.fromSupabaseUser(
+      user,
+      nameOverride: nameOverride,
+      phoneNumberOverride: phoneNumberOverride,
+    );
   }
 
   Future<void> _ensureNetworkConnected() async {
@@ -307,55 +354,30 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
 
     throw const AuthException(
       errorCode: AuthErrorCode.networkRequestFailed,
-      firebaseCode: 'network-request-failed',
+      authCode: 'network-request-failed',
       debugMessage: 'No internet connection is available.',
     );
   }
 
-  Future<void> _upsertUserProfile(
-    UserModel model, {
-    String? fullName,
-    String? phoneNumber,
-  }) async {
-    final supabase = _supabaseClient;
-    if (supabase == null) {
-      throw const AuthException(
-        errorCode: AuthErrorCode.profileSyncUnavailable,
-        firebaseCode: 'profile-sync-unavailable',
-        debugMessage:
-            'Supabase is not configured. Provide SUPABASE_URL and SUPABASE_ANON_KEY.',
-      );
-    }
-
-    final normalizedPhone = (phoneNumber ?? model.phoneNumber)?.trim();
-    final payload = <String, dynamic>{
-      'id': model.uid,
-      'email': model.email.trim().toLowerCase(),
-      'full_name': (fullName ?? model.name).trim(),
-      'updated_at': DateTime.now().toUtc().toIso8601String(),
-    };
-
-    if (normalizedPhone?.isNotEmpty ?? false) {
-      payload['phone_number'] = normalizedPhone;
-    }
-
-    await _upsertUserPayload(supabase, payload);
+  Future<void> _upsertUserProfile(UserModel model) async {
+    final client = _requireSupabaseClient();
+    await _upsertUserPayload(client, model.toSupabaseProfile());
   }
 
   Future<void> _upsertUserPayload(
-    SupabaseClient supabase,
+    supabase.SupabaseClient supabaseClient,
     Map<String, dynamic> payload,
   ) async {
-    PostgrestException? invalidRoleException;
+    supabase.PostgrestException? invalidRoleException;
 
     for (final role in _roleCandidates) {
       try {
-        await supabase.from('users').upsert({
+        await supabaseClient.from('users').upsert({
           ...payload,
           'role': role,
         }, onConflict: 'id');
         return;
-      } on PostgrestException catch (exception) {
+      } on supabase.PostgrestException catch (exception) {
         if (!SupabaseExceptionMapper.isInvalidRole(exception)) {
           rethrow;
         }
@@ -365,8 +387,8 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     }
 
     try {
-      await supabase.from('users').upsert(payload, onConflict: 'id');
-    } on PostgrestException catch (exception) {
+      await supabaseClient.from('users').upsert(payload, onConflict: 'id');
+    } on supabase.PostgrestException catch (exception) {
       if (invalidRoleException != null &&
           SupabaseExceptionMapper.isMissingRole(exception)) {
         throw invalidRoleException;
@@ -376,20 +398,14 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     }
   }
 
-  Future<void> _deleteCreatedUser(User user) async {
-    try {
-      await user.delete();
-    } on FirebaseAuthException {
-      // Keep the original profile-save error. The next attempt may need cleanup
-      // from Firebase Console if this recovery delete fails.
-    }
-  }
-
   Future<void> _signOutAfterProfileSyncFailure({
     bool includeGoogle = false,
   }) async {
     try {
-      await _firebaseAuth.signOut();
+      final client = _supabaseClient;
+      if (client != null) {
+        await client.auth.signOut();
+      }
       if (includeGoogle) {
         await _ensureGoogleSignInInitialized();
         await _googleSignIn.signOut();
@@ -397,6 +413,41 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     } on Object {
       // Keep the original Supabase profile-save error.
     }
+  }
+
+  bool _isEmailNotConfirmed(supabase.AuthException exception) {
+    return exception.code == 'email_not_confirmed' ||
+        exception.message.toLowerCase().contains('email not confirmed');
+  }
+
+  String? get _verificationEmail {
+    final currentEmail = _supabaseClient?.auth.currentUser?.email;
+    if (currentEmail?.trim().isNotEmpty == true) {
+      return currentEmail!.trim().toLowerCase();
+    }
+
+    final pendingEmail = _pendingVerificationEmail;
+    if (pendingEmail?.trim().isNotEmpty == true) {
+      return pendingEmail!.trim().toLowerCase();
+    }
+
+    return null;
+  }
+
+  void _setPendingVerificationEmail({
+    required String email,
+    String? name,
+    String? phoneNumber,
+  }) {
+    _pendingVerificationEmail = email.trim().toLowerCase();
+    _pendingVerificationName = name?.trim();
+    _pendingVerificationPhoneNumber = phoneNumber?.trim();
+  }
+
+  void _clearPendingVerificationEmail() {
+    _pendingVerificationEmail = null;
+    _pendingVerificationName = null;
+    _pendingVerificationPhoneNumber = null;
   }
 
   AuthErrorCode _mapGoogleSignInError(GoogleSignInException exception) {

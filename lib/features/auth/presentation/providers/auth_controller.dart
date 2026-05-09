@@ -237,21 +237,9 @@ final class RegisterFormController extends Notifier<RegisterFormState> {
         errorMessage: failure.localizedMessage(l10n),
       );
       return false;
-    }, (_) async {
-      final verificationResult = await ref.read(verifyEmailUseCaseProvider)(
-        const NoParams(),
-      );
-
-      return verificationResult.fold((failure) async {
-        state = state.copyWith(
-          isSubmitting: false,
-          errorMessage: failure.localizedMessage(l10n),
-        );
-        return false;
-      }, (_) async {
-        state = state.copyWith(isSubmitting: false, errorMessage: null);
-        return true;
-      });
+    }, (_) {
+      state = state.copyWith(isSubmitting: false, errorMessage: null);
+      return true;
     });
   }
 

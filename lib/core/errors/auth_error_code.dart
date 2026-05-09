@@ -28,19 +28,23 @@ enum AuthErrorCode {
   wrongPassword('wrong-password'),
   unknown('unknown');
 
-  const AuthErrorCode(this.firebaseCode);
+  const AuthErrorCode(this.code);
 
-  final String firebaseCode;
+  final String code;
 
-  static AuthErrorCode fromFirebaseCode(String? code) {
+  static AuthErrorCode fromCode(String? code) {
     return switch (code) {
       'account-exists-with-different-credential' =>
         AuthErrorCode.accountExistsWithDifferentCredential,
       'canceled' || 'cancelled' => AuthErrorCode.cancelled,
       'credential-already-in-use' => AuthErrorCode.credentialAlreadyInUse,
-      'email-already-in-use' => AuthErrorCode.emailAlreadyInUse,
+      'email_exists' ||
+      'email-already-in-use' =>
+        AuthErrorCode.emailAlreadyInUse,
       'expired-action-code' => AuthErrorCode.expiredActionCode,
       'invalid-action-code' => AuthErrorCode.invalidActionCode,
+      'email_not_confirmed' => AuthErrorCode.invalidCredential,
+      'invalid_credentials' => AuthErrorCode.invalidCredential,
       'invalid-credential' => AuthErrorCode.invalidCredential,
       'invalid-email' => AuthErrorCode.invalidEmail,
       'invalid-verification-code' => AuthErrorCode.invalidVerificationCode,
@@ -54,9 +58,11 @@ enum AuthErrorCode {
       'profile-sync-unavailable' => AuthErrorCode.profileSyncUnavailable,
       'provider-already-linked' => AuthErrorCode.providerAlreadyLinked,
       'requires-recent-login' => AuthErrorCode.requiresRecentLogin,
+      'over_email_send_rate_limit' => AuthErrorCode.tooManyRequests,
       'too-many-requests' => AuthErrorCode.tooManyRequests,
       'user-disabled' => AuthErrorCode.userDisabled,
       'user-not-found' => AuthErrorCode.userNotFound,
+      'weak_password' => AuthErrorCode.weakPassword,
       'weak-password' => AuthErrorCode.weakPassword,
       'wrong-password' => AuthErrorCode.wrongPassword,
       _ => AuthErrorCode.unknown,

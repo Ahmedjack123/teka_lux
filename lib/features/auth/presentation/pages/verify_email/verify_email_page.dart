@@ -71,13 +71,11 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage>
 
     return VerifyEmailScaffold(
       isResending: _isResending,
-      isVerified: _isVerified,
       resendSecondsRemaining: _resendSecondsRemaining,
       message: _message,
       errorMessage: _errorMessage,
       onResend: () => _resendEmail(l10n),
       onBackToLogin: _backToLogin,
-      onNextToHome: _nextToHome,
     );
   }
 
@@ -170,10 +168,8 @@ class _VerifyEmailPageState extends ConsumerState<VerifyEmailPage>
       _errorMessage = null;
       _resendSecondsRemaining = 0;
     });
-  }
 
-  void _nextToHome() {
-    context.goNamed(RouteNames.home);
+    context.goNamed(RouteNames.verifyEmailSuccess);
   }
 
   void _startResendCooldown() {

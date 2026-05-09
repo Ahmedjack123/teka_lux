@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -17,17 +16,12 @@ import '../../domain/usecases/register.dart';
 import '../../domain/usecases/sign_in_with_google.dart';
 import '../../domain/usecases/verify_email.dart';
 
-final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
-  return FirebaseAuth.instance;
-});
-
 final googleSignInProvider = Provider<GoogleSignIn>((ref) {
   return GoogleSignIn.instance;
 });
 
 final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>((ref) {
-  return FirebaseAuthRemoteDatasource(
-    firebaseAuth: ref.watch(firebaseAuthProvider),
+  return SupabaseAuthRemoteDatasource(
     supabaseClient: ref.watch(supabaseClientOrNullProvider),
     networkInfo: ref.watch(networkInfoProvider),
     googleSignIn: ref.watch(googleSignInProvider),
