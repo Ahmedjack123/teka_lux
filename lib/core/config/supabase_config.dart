@@ -13,6 +13,8 @@ class SupabaseConfig {
     defaultValue: 'sb_publishable_74Ivj2la7QRL-zeMg2RYNg_fve29VEO',
   );
   static const authRedirectUrl = 'teka-luxe://auth-callback';
+  static const passwordRecoveryRedirectUrl =
+      'https://tiny-sfogliatella-25121e.netlify.app/';
 
   static bool get isConfigured {
     return url.trim().isNotEmpty && anonKey.trim().isNotEmpty;

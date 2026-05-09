@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAFBFF" />
+    <title>Teka Luxe - Reset Password</title>
+    <style>
+      :root {
+        --primary: #315cff;
+        --primary-dark: #080a12;
+        --accent: #b9ff3d;
+        --background: #fafbff;
+        --surface: #ffffff;
+        --input: #f0f3f8;
+        --border: #d7dee9;
+        --text: #1a1d29;
+        --muted: #71798a;
+        --error: #ff3d57;
+        --success: #18a66a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(185, 255, 61, 0.16), transparent 32rem),
+          radial-gradient(circle at bottom right, rgba(49, 92, 255, 0.14), transparent 34rem),
+          var(--background);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: clamp(24px, 5vw, 56px);
+      }
+
+      .shell {
+        width: min(100%, 460px);
+      }
+
+      .brand {
+        margin-bottom: 22px;
+        text-align: center;
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .card {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(28px, 6vw, 42px);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border);
+        border-radius: 32px;
+        box-shadow: 0 24px 60px rgba(49, 92, 255, 0.1);
+        backdrop-filter: blur(18px);
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+      }
+
+      .mark {
+        width: 74px;
+        height: 74px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 24px;
+        border: 1px solid rgba(49, 92, 255, 0.18);
+        border-radius: 999px;
+        background: rgba(49, 92, 255, 0.1);
+        color: var(--primary);
+        font-size: 30px;
+        font-weight: 900;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--primary-dark);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(34px, 8vw, 46px);
+        line-height: 1.02;
+        text-align: center;
+        letter-spacing: 0;
+      }
+
+      .intro {
+        margin: 16px 0 30px;
+        color: #323746;
+        font-size: 15px;
+        line-height: 1.65;
+        text-align: center;
+      }
+
+      .form {
+        display: grid;
+        gap: 14px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      input {
+        width: 100%;
+        height: 58px;
+        padding: 0 18px;
+        color: var(--text);
+        background: var(--input);
+        border: 1px solid transparent;
+        border-radius: 20px;
+        outline: none;
+        transition:
+          border-color 180ms ease,
+          background 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      input:focus {
+        background: var(--surface);
+        border-color: rgba(49, 92, 255, 0.55);
+        box-shadow: 0 0 0 4px rgba(49, 92, 255, 0.1);
+      }
+
+      .button {
+        width: 100%;
+        height: 58px;
+        display: inline-grid;
+        place-items: center;
+        margin-top: 12px;
+        color: #ffffff;
+        background: var(--primary);
+        border: 0;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        box-shadow: 0 16px 28px rgba(49, 92, 255, 0.18);
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease;
+      }
+
+      .button:active {
+        transform: translateY(1px);
+      }
+
+      .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+        transform: none;
+      }
+
+      .message {
+        display: none;
+        margin: 16px 0 0;
+        padding: 13px 14px;
+        border-radius: 16px;
+        font-size: 13px;
+        line-height: 1.45;
+        text-align: center;
+      }
+
+      .message.is-visible {
+        display: block;
+      }
+
+      .message.error {
+        color: var(--error);
+        background: rgba(255, 61, 87, 0.08);
+        border: 1px solid rgba(255, 61, 87, 0.18);
+      }
+
+      .message.success {
+        color: var(--success);
+        background: rgba(24, 166, 106, 0.09);
+        border: 1px solid rgba(24, 166, 106, 0.2);
+      }
+
+      .hint {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.55;
+        text-align: center;
+      }
+
+      .loader {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.38);
+        border-top-color: #ffffff;
+        border-radius: 999px;
+        animation: spin 800ms linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="shell" aria-labelledby="page-title">
+        <div class="brand">Teka Luxe</div>
+
+        <div class="card">
+          <div class="mark" aria-hidden="true">TK</div>
+
+          <h1 id="page-title">Create New Password</h1>
+          <p class="intro">
+            Enter a new password for your account. After it is saved, we will
+            send you back to the app to sign in.
+          </p>
+
+          <form class="form" id="reset-form" novalidate>
+            <div class="field">
+              <label for="password">New password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="6"
+                placeholder="At least 6 characters"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="confirm-password">Confirm password</label>
+              <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                autocomplete="new-password"
+                minlength="6"
+                placeholder="Repeat password"
+                required
+              />
+            </div>
+
+            <button class="button" id="submit-button" type="submit">
+              Save New Password
+            </button>
+          </form>
+
+          <p class="message" id="message" role="status" aria-live="polite"></p>
+
+          <p class="hint">
+            If this page says the reset link is invalid, request a new reset
+            email from the Teka Luxe app.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+      const SUPABASE_URL = "https://ciitrkesjdhwzzysmpjn.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_74Ivj2la7QRL-zeMg2RYNg_fve29VEO";
+      const APP_LOGIN_DEEP_LINK = "teka-luxe://auth-callback";
+      const REDIRECT_DELAY_MS = 3000;
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          detectSessionInUrl: false,
+          persistSession: true,
+          autoRefreshToken: false,
+          storage: window.sessionStorage,
+        },
+      });
+
+      const form = document.querySelector("#reset-form");
+      const passwordInput = document.querySelector("#password");
+      const confirmPasswordInput = document.querySelector("#confirm-password");
+      const submitButton = document.querySelector("#submit-button");
+      const message = document.querySelector("#message");
+
+      let recoverySessionReady = false;
+      let recoveryTokenHash = "";
+
+      initializeRecoverySession();
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearMessage();
+
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        if (!recoverySessionReady) {
+          showError("This reset link is invalid or expired. Request a new one.");
+          return;
+        }
+
+        if (password.length < 6) {
+          showError("Use at least 6 characters.");
+          passwordInput.focus();
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match.");
+          confirmPasswordInput.focus();
+          return;
+        }
+
+        setLoading(true);
+
+        const recoveryError = await ensureRecoverySession();
+
+        if (recoveryError) {
+          setLoading(false);
+          showError(recoveryError);
+          return;
+        }
+
+        const { error } = await supabase.auth.updateUser({ password });
+
+        if (error) {
+          setLoading(false);
+          showError(error.message || "Could not update your password.");
+          return;
+        }
+
+        showSuccess("Password changed successfully. Opening Teka Luxe...");
+        await supabase.auth.signOut();
+        setLoading(false);
+        disableForm();
+        form.reset();
+
+        window.setTimeout(() => {
+          window.location.href = APP_LOGIN_DEEP_LINK;
+        }, REDIRECT_DELAY_MS);
+      });
+
+      async function initializeRecoverySession() {
+        const url = new URL(window.location.href);
+        const hashParams = new URLSearchParams(
+          window.location.hash.replace(/^#/, ""),
+        );
+
+        const authError =
+          url.searchParams.get("error_description") ||
+          hashParams.get("error_description");
+
+        if (authError) {
+          showError(decodeURIComponent(authError));
+          disableForm();
+          return;
+        }
+
+        try {
+          const tokenHash =
+            url.searchParams.get("token_hash") || hashParams.get("token_hash");
+          const type = url.searchParams.get("type") || hashParams.get("type");
+
+          if (tokenHash) {
+            if (type && type !== "recovery") {
+              throw new Error("This reset link is not valid for recovery.");
+            }
+
+            recoveryTokenHash = tokenHash;
+            recoverySessionReady = true;
+            return;
+          }
+
+          if (url.searchParams.has("code")) {
+            showError(
+              "This reset link was created with an unsupported auth code flow. Request a new reset email.",
+            );
+            disableForm();
+            return;
+          }
+
+          const accessToken = hashParams.get("access_token");
+          const refreshToken = hashParams.get("refresh_token");
+          if (accessToken && refreshToken) {
+            const { error } = await supabase.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+            if (error) {
+              throw error;
+            }
+          }
+
+          const {
+            data: { session },
+            error,
+          } = await supabase.auth.getSession();
+
+          if (error) {
+            throw error;
+          }
+
+          if (!session) {
+            showError(
+              "This reset link is invalid or expired. Request a new reset email.",
+            );
+            disableForm();
+            return;
+          }
+
+          recoverySessionReady = true;
+        } catch (error) {
+          showError(error.message || "Could not open this reset link.");
+          disableForm();
+        } finally {
+          if (!recoveryTokenHash) {
+            removeTokensFromAddressBar();
+          }
+        }
+      }
+
+      async function ensureRecoverySession() {
+        if (recoveryTokenHash) {
+          const { data, error } = await supabase.auth.verifyOtp({
+            token_hash: recoveryTokenHash,
+            type: "recovery",
+          });
+
+          if (error) {
+            return (
+              error.message ||
+              "This reset link is invalid or expired. Request a new reset email."
+            );
+          }
+
+          if (data.session) {
+            const { error: sessionError } = await supabase.auth.setSession({
+              access_token: data.session.access_token,
+              refresh_token: data.session.refresh_token,
+            });
+
+            if (sessionError) {
+              return sessionError.message || "Could not open this reset link.";
+            }
+          }
+
+          recoveryTokenHash = "";
+          removeTokensFromAddressBar();
+        }
+
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          return error.message || "Could not open this reset link.";
+        }
+
+        if (!session) {
+          return "This reset link is invalid or expired. Request a new reset email.";
+        }
+
+        return "";
+      }
+
+      function setLoading(isLoading) {
+        submitButton.disabled = isLoading;
+        submitButton.innerHTML = isLoading
+          ? '<span class="loader" aria-label="Loading"></span>'
+          : "Save New Password";
+      }
+
+      function disableForm() {
+        passwordInput.disabled = true;
+        confirmPasswordInput.disabled = true;
+        submitButton.disabled = true;
+      }
+
+      function showError(text) {
+        message.textContent = text;
+        message.className = "message error is-visible";
+      }
+
+      function showSuccess(text) {
+        message.textContent = text;
+        message.className = "message success is-visible";
+      }
+
+      function clearMessage() {
+        message.textContent = "";
+        message.className = "message";
+      }
+
+      function removeTokensFromAddressBar() {
+        if (!window.history.replaceState) {
+          return;
+        }
+
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    </script>
+  </body>
+</html>

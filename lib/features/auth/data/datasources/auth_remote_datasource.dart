@@ -220,7 +220,7 @@ final class SupabaseAuthRemoteDatasource implements AuthRemoteDatasource {
       await _ensureNetworkConnected();
       await _requireSupabaseClient().auth.resetPasswordForEmail(
             email.trim().toLowerCase(),
-            redirectTo: SupabaseConfig.authRedirectUrl,
+            redirectTo: SupabaseConfig.passwordRecoveryRedirectUrl,
           );
     } on supabase.AuthException catch (exception, stackTrace) {
       throw SupabaseExceptionMapper.fromAuthException(exception, stackTrace);
