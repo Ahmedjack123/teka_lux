@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart'
 import '../../../../core/errors/auth_error_code.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/supabase_exceptions.dart';
+import '../../../../core/network/network_info.dart';
 import '../models/user_model.dart';
 
 abstract interface class AuthRemoteDatasource {
@@ -40,13 +41,16 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   FirebaseAuthRemoteDatasource({
     required FirebaseAuth firebaseAuth,
     required SupabaseClient? supabaseClient,
+    required NetworkInfo networkInfo,
     required GoogleSignIn googleSignIn,
   })  : _firebaseAuth = firebaseAuth,
         _supabaseClient = supabaseClient,
+        _networkInfo = networkInfo,
         _googleSignIn = googleSignIn;
 
   final FirebaseAuth _firebaseAuth;
   final SupabaseClient? _supabaseClient;
+  final NetworkInfo _networkInfo;
   final GoogleSignIn _googleSignIn;
 
   static const List<String> _roleCandidates = ['customer', 'user'];
@@ -72,6 +76,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     required String password,
   }) async {
     try {
+      await _ensureNetworkConnected();
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -105,6 +110,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     required String phoneNumber,
   }) async {
     try {
+      await _ensureNetworkConnected();
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password,
@@ -142,6 +148,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   @override
   Future<UserModel> signInWithGoogle() async {
     try {
+      await _ensureNetworkConnected();
       await _ensureGoogleSignInInitialized();
 
       if (!_googleSignIn.supportsAuthenticate()) {
@@ -201,6 +208,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   @override
   Future<void> sendPasswordResetEmail(String email) async {
     try {
+      await _ensureNetworkConnected();
       await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
     } on FirebaseAuthException catch (exception) {
       throw AuthException.fromFirebase(exception);
@@ -210,6 +218,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   @override
   Future<void> verifyEmail() async {
     try {
+      await _ensureNetworkConnected();
       final user = _firebaseAuth.currentUser;
 
       if (user == null) {
@@ -228,6 +237,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
   @override
   Future<bool> isCurrentUserEmailVerified() async {
     try {
+      await _ensureNetworkConnected();
       final user = _firebaseAuth.currentUser;
 
       if (user == null) {
@@ -288,6 +298,18 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
     }
 
     return UserModel.fromFirebaseUser(user);
+  }
+
+  Future<void> _ensureNetworkConnected() async {
+    if (await _networkInfo.isConnected) {
+      return;
+    }
+
+    throw const AuthException(
+      errorCode: AuthErrorCode.networkRequestFailed,
+      firebaseCode: 'network-request-failed',
+      debugMessage: 'No internet connection is available.',
+    );
   }
 
   Future<void> _upsertUserProfile(

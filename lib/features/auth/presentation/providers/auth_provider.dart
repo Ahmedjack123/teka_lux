@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../shared/providers/connectivity_provider.dart';
 import '../../../../shared/providers/supabase_provider.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
@@ -28,6 +29,7 @@ final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>((ref) {
   return FirebaseAuthRemoteDatasource(
     firebaseAuth: ref.watch(firebaseAuthProvider),
     supabaseClient: ref.watch(supabaseClientOrNullProvider),
+    networkInfo: ref.watch(networkInfoProvider),
     googleSignIn: ref.watch(googleSignInProvider),
   );
 });
