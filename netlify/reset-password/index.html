@@ -1,0 +1,1109 @@
+\<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FAFBFF" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Teka Luxe — Reset Password</title>
+    <style>
+      :root {
+        --primary: #315cff;
+        --primary-dark: #080a12;
+        --accent: #b9ff3d;
+        --accent-dark: #8fd400;
+        --background: #fafbff;
+        --surface: #ffffff;
+        --input: #f0f3f8;
+        --border: #d7dee9;
+        --text: #1a1d29;
+        --muted: #71798a;
+        --error: #ff3d57;
+        --success: #18a66a;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+        background: var(--background);
+        overflow-x: hidden;
+      }
+
+      /* ── animated background ── */
+      .bg-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            ellipse 70% 60% at 10% 10%,
+            rgba(185, 255, 61, 0.13),
+            transparent
+          ),
+          radial-gradient(
+            ellipse 65% 55% at 90% 90%,
+            rgba(49, 92, 255, 0.12),
+            transparent
+          ),
+          radial-gradient(
+            ellipse 50% 40% at 50% 50%,
+            rgba(49, 92, 255, 0.04),
+            transparent
+          );
+        animation: bgPulse 12s ease-in-out infinite alternate;
+      }
+
+      @keyframes bgPulse {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0.72;
+        }
+      }
+
+      /* floating orbs */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+        animation: float 18s ease-in-out infinite;
+      }
+      .orb-1 {
+        width: 380px;
+        height: 380px;
+        top: -120px;
+        left: -100px;
+        background: rgba(185, 255, 61, 0.18);
+        animation-delay: 0s;
+      }
+      .orb-2 {
+        width: 420px;
+        height: 420px;
+        bottom: -140px;
+        right: -120px;
+        background: rgba(49, 92, 255, 0.16);
+        animation-delay: -7s;
+      }
+      .orb-3 {
+        width: 200px;
+        height: 200px;
+        top: 40%;
+        left: 70%;
+        background: rgba(185, 255, 61, 0.1);
+        animation-delay: -13s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(30px, -20px) scale(1.06);
+        }
+        66% {
+          transform: translate(-20px, 30px) scale(0.96);
+        }
+      }
+
+      /* ── layout ── */
+      .page {
+        position: relative;
+        z-index: 1;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: clamp(24px, 5vw, 56px);
+      }
+
+      .shell {
+        width: min(100%, 480px);
+        animation: fadeUp 0.55s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── brand ── */
+      .brand {
+        margin-bottom: 26px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .brand-logo {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 14px;
+        background: var(--primary);
+        color: #fff;
+        font-weight: 900;
+        font-size: 15px;
+        letter-spacing: 0.08em;
+        box-shadow: 0 8px 20px rgba(49, 92, 255, 0.35);
+      }
+
+      .brand-name {
+        color: var(--primary-dark);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        opacity: 0.55;
+      }
+
+      /* ── card ── */
+      .card {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(32px, 7vw, 52px) clamp(28px, 6vw, 48px);
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(215, 222, 233, 0.7);
+        border-radius: 36px;
+        box-shadow:
+          0 2px 0 rgba(255, 255, 255, 0.9) inset,
+          0 32px 72px rgba(49, 92, 255, 0.1),
+          0 8px 24px rgba(0, 0, 0, 0.04);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      /* top gradient bar */
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--primary) 0%,
+          var(--accent) 100%
+        );
+        border-radius: 36px 36px 0 0;
+      }
+
+      /* subtle noise texture */
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+        pointer-events: none;
+        opacity: 0.4;
+        mix-blend-mode: overlay;
+      }
+
+      /* ── icon mark ── */
+      .mark {
+        position: relative;
+        z-index: 1;
+        width: 72px;
+        height: 72px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 28px;
+        border-radius: 22px;
+        background: linear-gradient(
+          135deg,
+          rgba(49, 92, 255, 0.12) 0%,
+          rgba(185, 255, 61, 0.1) 100%
+        );
+        border: 1px solid rgba(49, 92, 255, 0.15);
+      }
+
+      .mark svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      /* ── headings ── */
+      h1 {
+        position: relative;
+        z-index: 1;
+        margin: 0 0 4px;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: clamp(34px, 8vw, 48px);
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.01em;
+        text-align: center;
+        color: var(--primary-dark);
+      }
+
+      h1 span {
+        background: linear-gradient(135deg, var(--primary), #6a8bff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .intro {
+        position: relative;
+        z-index: 1;
+        margin: 14px 0 32px;
+        color: var(--muted);
+        font-size: 14.5px;
+        line-height: 1.65;
+        text-align: center;
+      }
+
+      /* ── form ── */
+      .form {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+
+      .input-wrap svg {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted);
+        width: 17px;
+        height: 17px;
+        pointer-events: none;
+        transition: color 180ms;
+      }
+
+      input[type="password"] {
+        width: 100%;
+        height: 58px;
+        padding: 0 48px 0 48px;
+        color: var(--text);
+        background: var(--input);
+        border: 1.5px solid transparent;
+        border-radius: 18px;
+        outline: none;
+        font-family: inherit;
+        font-size: 15px;
+        transition:
+          border-color 180ms ease,
+          background 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      input[type="password"]:focus {
+        background: var(--surface);
+        border-color: rgba(49, 92, 255, 0.5);
+        box-shadow: 0 0 0 4px rgba(49, 92, 255, 0.08);
+      }
+
+      input[type="password"]:focus ~ svg,
+      .input-wrap:focus-within svg {
+        color: var(--primary);
+      }
+
+      input[type="password"]::placeholder {
+        color: #b0b8c6;
+      }
+
+      .toggle-pw {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted);
+        padding: 4px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        transition:
+          color 180ms,
+          background 180ms;
+        width: 32px;
+        height: 32px;
+      }
+      .toggle-pw:hover {
+        color: var(--primary);
+        background: rgba(49, 92, 255, 0.06);
+      }
+      .toggle-pw svg {
+        width: 17px;
+        height: 17px;
+      }
+
+      /* password strength bar */
+      .strength-bar {
+        height: 3px;
+        border-radius: 99px;
+        background: var(--border);
+        overflow: hidden;
+        margin-top: 2px;
+        transition: opacity 180ms;
+        opacity: 0;
+      }
+      .strength-bar.visible {
+        opacity: 1;
+      }
+      .strength-fill {
+        height: 100%;
+        border-radius: 99px;
+        transition:
+          width 300ms ease,
+          background 300ms ease;
+        width: 0%;
+      }
+      .strength-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        transition: color 300ms;
+        height: 14px;
+      }
+
+      /* ── submit button ── */
+      .button {
+        position: relative;
+        width: 100%;
+        height: 58px;
+        display: inline-grid;
+        place-items: center;
+        margin-top: 6px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--primary) 0%, #1e43e8 100%);
+        border: 0;
+        border-radius: 18px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        box-shadow:
+          0 16px 32px rgba(49, 92, 255, 0.22),
+          0 1px 0 rgba(255, 255, 255, 0.2) inset;
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease,
+          box-shadow 180ms ease;
+        overflow: hidden;
+      }
+
+      .button::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.14) 0%,
+          transparent 60%
+        );
+        border-radius: inherit;
+      }
+
+      .button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow:
+          0 22px 40px rgba(49, 92, 255, 0.28),
+          0 1px 0 rgba(255, 255, 255, 0.2) inset;
+      }
+
+      .button:active:not(:disabled) {
+        transform: translateY(1px);
+        box-shadow:
+          0 8px 18px rgba(49, 92, 255, 0.2),
+          0 1px 0 rgba(255, 255, 255, 0.2) inset;
+      }
+
+      .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+        transform: none;
+      }
+
+      /* ── messages ── */
+      .message {
+        display: none;
+        margin: 18px 0 0;
+        padding: 14px 16px;
+        border-radius: 16px;
+        font-size: 13.5px;
+        line-height: 1.5;
+        text-align: center;
+        animation: msgIn 0.28s ease both;
+      }
+
+      @keyframes msgIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.is-visible {
+        display: block;
+      }
+
+      .message.error {
+        color: var(--error);
+        background: rgba(255, 61, 87, 0.07);
+        border: 1px solid rgba(255, 61, 87, 0.15);
+      }
+
+      .message.success {
+        color: var(--success);
+        background: rgba(24, 166, 106, 0.08);
+        border: 1px solid rgba(24, 166, 106, 0.18);
+      }
+
+      /* ── hint ── */
+      .hint {
+        position: relative;
+        z-index: 1;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+        text-align: center;
+        opacity: 0.75;
+      }
+
+      /* ── loader ── */
+      .loader {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #ffffff;
+        border-radius: 999px;
+        animation: spin 700ms linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ── divider ── */
+      .divider {
+        margin: 28px 0 0;
+        border: none;
+        border-top: 1px solid rgba(215, 222, 233, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-layer" aria-hidden="true"></div>
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="orb orb-3" aria-hidden="true"></div>
+
+    <main class="page">
+      <section class="shell" aria-labelledby="page-title">
+        <div class="brand">
+          <div class="brand-logo">TK</div>
+          <span class="brand-name">Teka Luxe</span>
+        </div>
+
+        <div class="card">
+          <div class="mark" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="color: var(--primary)"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+
+          <h1 id="page-title">Create <span>New</span><br />Password</h1>
+          <p class="intro">
+            Enter a new secure password for your account. Once saved, you'll be
+            taken back to the app to sign in.
+          </p>
+
+          <form class="form" id="reset-form" novalidate>
+            <div class="field">
+              <label for="password">New password</label>
+              <div class="input-wrap">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autocomplete="new-password"
+                  minlength="8"
+                  placeholder="At least 8 characters"
+                  required
+                />
+                <button
+                  type="button"
+                  class="toggle-pw"
+                  aria-label="Show password"
+                  data-target="password"
+                >
+                  <svg
+                    class="eye-open"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <svg
+                    class="eye-closed"
+                    style="display: none"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                    />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </button>
+              </div>
+              <div class="strength-bar" id="strength-bar">
+                <div class="strength-fill" id="strength-fill"></div>
+              </div>
+              <span
+                class="strength-label"
+                id="strength-label"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div class="field">
+              <label for="confirm-password">Confirm password</label>
+              <div class="input-wrap">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 12l2 2 4-4" />
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input
+                  id="confirm-password"
+                  name="confirm-password"
+                  type="password"
+                  autocomplete="new-password"
+                  minlength="8"
+                  placeholder="Repeat your password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="toggle-pw"
+                  aria-label="Show confirm password"
+                  data-target="confirm-password"
+                >
+                  <svg
+                    class="eye-open"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <svg
+                    class="eye-closed"
+                    style="display: none"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                    />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button class="button" id="submit-button" type="submit">
+              Save New Password
+            </button>
+          </form>
+
+          <p class="message" id="message" role="status" aria-live="polite"></p>
+
+          <hr class="divider" />
+          <p class="hint">
+            If this link appears invalid or expired, please request a new
+            password reset email from within the Teka Luxe app.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+      /* ─── CONFIG ──────────────────────────────────────────────── */
+      const SUPABASE_URL = "https://ciitrkesjdhwzzysmpjn.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_74Ivj2la7QRL-zeMg2RYNg_fve29VEO";
+      const APP_LOGIN_DEEP_LINK = "teka-luxe://auth-callback";
+      const REDIRECT_DELAY_MS = 3000;
+      const REQUEST_TIMEOUT_MS = 12000; // 12 s max per Supabase call
+      /* ──────────────────────────────────────────────────────────── */
+
+      /* FIX 1 — wipe any stale session from a previous reset attempt
+         so the new token_hash never conflicts with leftover auth state. */
+      try {
+        Object.keys(sessionStorage)
+          .filter((k) => k.startsWith("sb-"))
+          .forEach((k) => sessionStorage.removeItem(k));
+      } catch (_) {}
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          detectSessionInUrl: false,
+          persistSession: true,
+          autoRefreshToken: false,
+          storage: window.sessionStorage,
+        },
+      });
+
+      /* FIX 2 — timeout wrapper: every Supabase promise races a 12 s clock.
+         If Supabase hangs (stale session, network blip) we reject fast
+         instead of spinning forever. */
+      function withTimeout(promise, ms = REQUEST_TIMEOUT_MS) {
+        return Promise.race([
+          promise,
+          new Promise((_, reject) =>
+            setTimeout(
+              () => reject(new Error("Request timed out. Please try again.")),
+              ms,
+            ),
+          ),
+        ]);
+      }
+
+      const form = document.querySelector("#reset-form");
+      const passwordInput = document.querySelector("#password");
+      const confirmPasswordInput = document.querySelector("#confirm-password");
+      const submitButton = document.querySelector("#submit-button");
+      const message = document.querySelector("#message");
+      const strengthBar = document.querySelector("#strength-bar");
+      const strengthFill = document.querySelector("#strength-fill");
+      const strengthLabel = document.querySelector("#strength-label");
+
+      let recoverySessionReady = false;
+      let recoveryTokenHash = "";
+
+      /* ── password strength meter ── */
+      passwordInput.addEventListener("input", () => {
+        const pw = passwordInput.value;
+        if (!pw) {
+          strengthBar.classList.remove("visible");
+          strengthLabel.textContent = "";
+          return;
+        }
+        strengthBar.classList.add("visible");
+
+        let score = 0;
+        if (pw.length >= 8) score++;
+        if (pw.length >= 12) score++;
+        if (/[A-Z]/.test(pw)) score++;
+        if (/[0-9]/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+        const levels = [
+          { pct: "20%", color: "#ff3d57", label: "Very weak" },
+          { pct: "40%", color: "#ff7a00", label: "Weak" },
+          { pct: "60%", color: "#f5c518", label: "Fair" },
+          { pct: "80%", color: "#18a66a", label: "Strong" },
+          { pct: "100%", color: "#0d7a4e", label: "Very strong" },
+        ];
+        const lvl = levels[Math.min(score, 4)];
+        strengthFill.style.width = lvl.pct;
+        strengthFill.style.background = lvl.color;
+        strengthLabel.textContent = lvl.label;
+        strengthLabel.style.color = lvl.color;
+      });
+
+      /* ── show/hide password toggles ── */
+      document.querySelectorAll(".toggle-pw").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const target = document.getElementById(btn.dataset.target);
+          const isText = target.type === "text";
+          target.type = isText ? "password" : "text";
+          btn.querySelector(".eye-open").style.display = isText ? "" : "none";
+          btn.querySelector(".eye-closed").style.display = isText ? "none" : "";
+          btn.setAttribute(
+            "aria-label",
+            isText ? "Show password" : "Hide password",
+          );
+        });
+      });
+
+      /* ── form submission ── */
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        clearMessage();
+
+        const password = passwordInput.value.trim();
+        const confirmPassword = confirmPasswordInput.value.trim();
+
+        if (!recoverySessionReady) {
+          showError(
+            "This reset link is invalid or expired. Request a new one from the app.",
+          );
+          return;
+        }
+
+        if (password.length < 8) {
+          showError("Password must be at least 8 characters.");
+          passwordInput.focus();
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match. Please try again.");
+          confirmPasswordInput.focus();
+          return;
+        }
+
+        setLoading(true);
+
+        let recoveryError;
+        try {
+          recoveryError = await withTimeout(ensureRecoverySession());
+        } catch (e) {
+          setLoading(false);
+          showError(e.message);
+          return;
+        }
+
+        if (recoveryError) {
+          setLoading(false);
+          showError(recoveryError);
+          return;
+        }
+
+        let updateError;
+        try {
+          const result = await withTimeout(
+            supabase.auth.updateUser({ password }),
+          );
+          updateError = result.error;
+        } catch (e) {
+          setLoading(false);
+          showError(e.message);
+          return;
+        }
+
+        if (updateError) {
+          setLoading(false);
+          showError(
+            updateError.message ||
+              "Could not update your password. Please try again.",
+          );
+          return;
+        }
+
+        showSuccess("Password changed successfully! Opening Teka Luxe…");
+
+        /* FIX 3 — fully clear session after success so a future reset on the
+           same browser tab starts completely clean. */
+        try {
+          await withTimeout(supabase.auth.signOut());
+        } catch (_) {}
+        try {
+          Object.keys(sessionStorage)
+            .filter((k) => k.startsWith("sb-"))
+            .forEach((k) => sessionStorage.removeItem(k));
+        } catch (_) {}
+
+        recoverySessionReady = false;
+        recoveryTokenHash = "";
+
+        setLoading(false);
+        disableForm();
+        form.reset();
+        strengthBar.classList.remove("visible");
+        strengthLabel.textContent = "";
+
+        window.setTimeout(() => {
+          window.location.href = APP_LOGIN_DEEP_LINK;
+        }, REDIRECT_DELAY_MS);
+      });
+
+      /* ── recovery session bootstrap ── */
+      async function initializeRecoverySession() {
+        const url = new URL(window.location.href);
+        const hashParams = new URLSearchParams(
+          window.location.hash.replace(/^#/, ""),
+        );
+
+        const authError =
+          url.searchParams.get("error_description") ||
+          hashParams.get("error_description");
+
+        if (authError) {
+          showError(decodeURIComponent(authError));
+          disableForm();
+          return;
+        }
+
+        try {
+          const tokenHash =
+            url.searchParams.get("token_hash") || hashParams.get("token_hash");
+          const type = url.searchParams.get("type") || hashParams.get("type");
+
+          if (tokenHash) {
+            if (type && type !== "recovery") {
+              throw new Error(
+                "This reset link is not valid for password recovery.",
+              );
+            }
+            recoveryTokenHash = tokenHash;
+            recoverySessionReady = true;
+            return;
+          }
+
+          if (url.searchParams.has("code")) {
+            showError(
+              "This reset link uses an unsupported flow. Please request a new reset email from the app.",
+            );
+            disableForm();
+            return;
+          }
+
+          const accessToken = hashParams.get("access_token");
+          const refreshToken = hashParams.get("refresh_token");
+
+          if (accessToken && refreshToken) {
+            let err;
+            try {
+              ({ error: err } = await withTimeout(
+                supabase.auth.setSession({
+                  access_token: accessToken,
+                  refresh_token: refreshToken,
+                }),
+              ));
+            } catch (e) {
+              throw e;
+            }
+            if (err) throw err;
+          }
+
+          let session, error;
+          try {
+            ({
+              data: { session },
+              error,
+            } = await withTimeout(supabase.auth.getSession()));
+          } catch (e) {
+            throw e;
+          }
+          if (error) throw error;
+
+          if (!session) {
+            showError(
+              "This reset link is invalid or expired. Please request a new one.",
+            );
+            disableForm();
+            return;
+          }
+
+          recoverySessionReady = true;
+        } catch (err) {
+          showError(err.message || "Could not open this reset link.");
+          disableForm();
+        } finally {
+          if (!recoveryTokenHash) removeTokensFromAddressBar();
+        }
+      }
+
+      async function ensureRecoverySession() {
+        if (recoveryTokenHash) {
+          let data, error;
+          try {
+            ({ data, error } = await withTimeout(
+              supabase.auth.verifyOtp({
+                token_hash: recoveryTokenHash,
+                type: "recovery",
+              }),
+            ));
+          } catch (e) {
+            return e.message;
+          }
+
+          if (error) {
+            return (
+              error.message ||
+              "This reset link is invalid or expired. Please request a new one."
+            );
+          }
+
+          if (data.session) {
+            let sessionError;
+            try {
+              ({ error: sessionError } = await withTimeout(
+                supabase.auth.setSession({
+                  access_token: data.session.access_token,
+                  refresh_token: data.session.refresh_token,
+                }),
+              ));
+            } catch (e) {
+              return e.message;
+            }
+            if (sessionError) {
+              return sessionError.message || "Could not establish a session.";
+            }
+          }
+
+          recoveryTokenHash = "";
+          removeTokensFromAddressBar();
+        }
+
+        let session, error;
+        try {
+          ({
+            data: { session },
+            error,
+          } = await withTimeout(supabase.auth.getSession()));
+        } catch (e) {
+          return e.message;
+        }
+        if (error) return error.message || "Could not open this reset link.";
+        if (!session)
+          return "This reset link is invalid or expired. Please request a new one.";
+        return "";
+      }
+
+      /* ── UI helpers ── */
+      function setLoading(isLoading) {
+        submitButton.disabled = isLoading;
+        submitButton.innerHTML = isLoading
+          ? '<span class="loader" aria-label="Saving…"></span>'
+          : "Save New Password";
+      }
+
+      function disableForm() {
+        passwordInput.disabled = true;
+        confirmPasswordInput.disabled = true;
+        submitButton.disabled = true;
+      }
+
+      function showError(text) {
+        message.textContent = text;
+        message.className = "message error is-visible";
+      }
+
+      function showSuccess(text) {
+        message.textContent = text;
+        message.className = "message success is-visible";
+      }
+
+      function clearMessage() {
+        message.textContent = "";
+        message.className = "message";
+      }
+
+      function removeTokensFromAddressBar() {
+        if (window.history?.replaceState) {
+          window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname,
+          );
+        }
+      }
+
+      /* kick off */
+      initializeRecoverySession();
+    </script>
+  </body>
+</html>
