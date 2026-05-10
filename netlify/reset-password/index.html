@@ -1,4 +1,4 @@
-\<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -306,7 +306,7 @@
         position: relative;
       }
 
-      .input-wrap svg {
+      .field-icon {
         position: absolute;
         left: 18px;
         top: 50%;
@@ -318,7 +318,7 @@
         transition: color 180ms;
       }
 
-      input[type="password"] {
+      .input-wrap input {
         width: 100%;
         height: 58px;
         padding: 0 48px 0 48px;
@@ -335,18 +335,18 @@
           box-shadow 180ms ease;
       }
 
-      input[type="password"]:focus {
+      .input-wrap input:focus {
         background: var(--surface);
         border-color: rgba(49, 92, 255, 0.5);
         box-shadow: 0 0 0 4px rgba(49, 92, 255, 0.08);
       }
 
-      input[type="password"]:focus ~ svg,
-      .input-wrap:focus-within svg {
+      .input-wrap input:focus ~ .field-icon,
+      .input-wrap:focus-within .field-icon {
         color: var(--primary);
       }
 
-      input[type="password"]::placeholder {
+      .input-wrap input::placeholder {
         color: #b0b8c6;
       }
 
@@ -359,23 +359,54 @@
         border: none;
         cursor: pointer;
         color: var(--muted);
-        padding: 4px;
+        padding: 0;
         display: grid;
         place-items: center;
-        border-radius: 8px;
+        border-radius: 10px;
         transition:
           color 180ms,
-          background 180ms;
-        width: 32px;
-        height: 32px;
+          background 180ms,
+          box-shadow 180ms,
+          transform 180ms;
+        width: 34px;
+        height: 34px;
       }
       .toggle-pw:hover {
         color: var(--primary);
-        background: rgba(49, 92, 255, 0.06);
+        background: rgba(49, 92, 255, 0.08);
+      }
+      .toggle-pw:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(49, 92, 255, 0.12);
+      }
+      .toggle-pw:active {
+        transform: translateY(-50%) scale(0.94);
+      }
+      .toggle-pw[aria-pressed="true"] {
+        color: var(--primary);
+        background: rgba(49, 92, 255, 0.12);
       }
       .toggle-pw svg {
         width: 17px;
         height: 17px;
+        position: static;
+        transform: none;
+        pointer-events: none;
+      }
+      .toggle-pw .eye-closed {
+        display: none;
+      }
+      .toggle-pw[aria-pressed="true"] .eye-open {
+        display: none;
+      }
+      .toggle-pw[aria-pressed="true"] .eye-closed {
+        display: block;
+      }
+      .toggle-pw:disabled {
+        cursor: not-allowed;
+        opacity: 0.45;
+        background: transparent;
+        box-shadow: none;
       }
 
       /* password strength bar */
@@ -506,6 +537,45 @@
         border: 1px solid rgba(24, 166, 106, 0.18);
       }
 
+      .redirect-panel {
+        display: none;
+        position: relative;
+        z-index: 1;
+        margin-top: 16px;
+        padding: 14px;
+        border: 1px solid rgba(49, 92, 255, 0.14);
+        border-radius: 16px;
+        background: rgba(49, 92, 255, 0.06);
+        text-align: center;
+      }
+      .redirect-panel.is-visible {
+        display: block;
+        animation: msgIn 0.28s ease both;
+      }
+      .redirect-countdown {
+        margin: 0;
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .redirect-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        margin-top: 10px;
+        padding: 0 16px;
+        color: #fff;
+        background: var(--primary);
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-decoration: none;
+        text-transform: uppercase;
+        box-shadow: 0 10px 18px rgba(49, 92, 255, 0.18);
+      }
+
       /* ── hint ── */
       .hint {
         position: relative;
@@ -582,6 +652,7 @@
               <label for="password">New password</label>
               <div class="input-wrap">
                 <svg
+                  class="field-icon"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -598,15 +669,18 @@
                   name="password"
                   type="password"
                   autocomplete="new-password"
-                  minlength="8"
-                  placeholder="At least 8 characters"
+                  minlength="6"
+                  placeholder="At least 6 characters"
                   required
                 />
                 <button
                   type="button"
                   class="toggle-pw"
                   aria-label="Show password"
+                  aria-pressed="false"
                   data-target="password"
+                  data-label="password"
+                  title="Show password"
                 >
                   <svg
                     class="eye-open"
@@ -622,7 +696,6 @@
                   </svg>
                   <svg
                     class="eye-closed"
-                    style="display: none"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -651,6 +724,7 @@
               <label for="confirm-password">Confirm password</label>
               <div class="input-wrap">
                 <svg
+                  class="field-icon"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -668,7 +742,7 @@
                   name="confirm-password"
                   type="password"
                   autocomplete="new-password"
-                  minlength="8"
+                  minlength="6"
                   placeholder="Repeat your password"
                   required
                 />
@@ -676,7 +750,10 @@
                   type="button"
                   class="toggle-pw"
                   aria-label="Show confirm password"
+                  aria-pressed="false"
                   data-target="confirm-password"
+                  data-label="confirm password"
+                  title="Show confirm password"
                 >
                   <svg
                     class="eye-open"
@@ -692,7 +769,6 @@
                   </svg>
                   <svg
                     class="eye-closed"
-                    style="display: none"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -715,6 +791,12 @@
           </form>
 
           <p class="message" id="message" role="status" aria-live="polite"></p>
+          <div class="redirect-panel" id="redirect-panel" aria-live="polite">
+            <p class="redirect-countdown" id="redirect-countdown"></p>
+            <a class="redirect-action" id="redirect-action" href="teka-luxe://auth-callback">
+              Open Teka Luxe
+            </a>
+          </div>
 
           <hr class="divider" />
           <p class="hint">
@@ -726,37 +808,30 @@
     </main>
 
     <script type="module">
-      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+      import {
+        applyActionCode,
+        checkActionCode,
+        confirmPasswordReset,
+        getAuth,
+        verifyPasswordResetCode,
+      } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-      /* ─── CONFIG ──────────────────────────────────────────────── */
-      const SUPABASE_URL = "https://ciitrkesjdhwzzysmpjn.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "sb_publishable_74Ivj2la7QRL-zeMg2RYNg_fve29VEO";
+      const firebaseConfig = {
+        apiKey: "AIzaSyCfMZh-pjGZwzTk6t75ao52WrSBKwKGoKs",
+        authDomain: "teka-luxe.firebaseapp.com",
+        projectId: "teka-luxe",
+        storageBucket: "teka-luxe.firebasestorage.app",
+        messagingSenderId: "640195549107",
+      };
+
       const APP_LOGIN_DEEP_LINK = "teka-luxe://auth-callback";
       const REDIRECT_DELAY_MS = 3000;
-      const REQUEST_TIMEOUT_MS = 12000; // 12 s max per Supabase call
-      /* ──────────────────────────────────────────────────────────── */
+      const REQUEST_TIMEOUT_MS = 12000;
 
-      /* FIX 1 — wipe any stale session from a previous reset attempt
-         so the new token_hash never conflicts with leftover auth state. */
-      try {
-        Object.keys(sessionStorage)
-          .filter((k) => k.startsWith("sb-"))
-          .forEach((k) => sessionStorage.removeItem(k));
-      } catch (_) {}
+      const firebaseApp = initializeApp(firebaseConfig);
+      const auth = getAuth(firebaseApp);
 
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-        auth: {
-          detectSessionInUrl: false,
-          persistSession: true,
-          autoRefreshToken: false,
-          storage: window.sessionStorage,
-        },
-      });
-
-      /* FIX 2 — timeout wrapper: every Supabase promise races a 12 s clock.
-         If Supabase hangs (stale session, network blip) we reject fast
-         instead of spinning forever. */
       function withTimeout(promise, ms = REQUEST_TIMEOUT_MS) {
         return Promise.race([
           promise,
@@ -777,9 +852,20 @@
       const strengthBar = document.querySelector("#strength-bar");
       const strengthFill = document.querySelector("#strength-fill");
       const strengthLabel = document.querySelector("#strength-label");
+      const pageTitle = document.querySelector("#page-title");
+      const intro = document.querySelector(".intro");
+      const redirectPanel = document.querySelector("#redirect-panel");
+      const redirectCountdown = document.querySelector("#redirect-countdown");
+      const redirectAction = document.querySelector("#redirect-action");
 
-      let recoverySessionReady = false;
-      let recoveryTokenHash = "";
+      const url = new URL(window.location.href);
+      const actionMode = url.searchParams.get("mode");
+      const actionCode = url.searchParams.get("oobCode");
+      const continueUrl =
+        url.searchParams.get("continueUrl") || APP_LOGIN_DEEP_LINK;
+
+      let resetCodeReady = false;
+      let redirectTimer = null;
 
       /* ── password strength meter ── */
       passwordInput.addEventListener("input", () => {
@@ -816,14 +902,18 @@
       document.querySelectorAll(".toggle-pw").forEach((btn) => {
         btn.addEventListener("click", () => {
           const target = document.getElementById(btn.dataset.target);
-          const isText = target.type === "text";
-          target.type = isText ? "password" : "text";
-          btn.querySelector(".eye-open").style.display = isText ? "" : "none";
-          btn.querySelector(".eye-closed").style.display = isText ? "none" : "";
+          const label = btn.dataset.label || "password";
+          const isVisible = target.type === "text";
+          const nextVisible = !isVisible;
+
+          target.type = nextVisible ? "text" : "password";
+          btn.setAttribute("aria-pressed", String(nextVisible));
           btn.setAttribute(
             "aria-label",
-            isText ? "Show password" : "Hide password",
+            nextVisible ? `Hide ${label}` : `Show ${label}`,
           );
+          btn.title = nextVisible ? `Hide ${label}` : `Show ${label}`;
+          target.focus({ preventScroll: true });
         });
       });
 
@@ -835,15 +925,15 @@
         const password = passwordInput.value.trim();
         const confirmPassword = confirmPasswordInput.value.trim();
 
-        if (!recoverySessionReady) {
+        if (!resetCodeReady || actionMode !== "resetPassword") {
           showError(
             "This reset link is invalid or expired. Request a new one from the app.",
           );
           return;
         }
 
-        if (password.length < 8) {
-          showError("Password must be at least 8 characters.");
+        if (password.length < 6) {
+          showError("Password must be at least 6 characters.");
           passwordInput.focus();
           return;
         }
@@ -856,211 +946,75 @@
 
         setLoading(true);
 
-        let recoveryError;
         try {
-          recoveryError = await withTimeout(ensureRecoverySession());
+          await withTimeout(
+            confirmPasswordReset(auth, actionCode, password),
+          );
         } catch (e) {
           setLoading(false);
-          showError(e.message);
-          return;
-        }
-
-        if (recoveryError) {
-          setLoading(false);
-          showError(recoveryError);
-          return;
-        }
-
-        let updateError;
-        try {
-          const result = await withTimeout(
-            supabase.auth.updateUser({ password }),
-          );
-          updateError = result.error;
-        } catch (e) {
-          setLoading(false);
-          showError(e.message);
-          return;
-        }
-
-        if (updateError) {
-          setLoading(false);
-          showError(
-            updateError.message ||
-              "Could not update your password. Please try again.",
-          );
+          showError(firebaseMessage(e));
           return;
         }
 
         showSuccess("Password changed successfully! Opening Teka Luxe…");
-
-        /* FIX 3 — fully clear session after success so a future reset on the
-           same browser tab starts completely clean. */
-        try {
-          await withTimeout(supabase.auth.signOut());
-        } catch (_) {}
-        try {
-          Object.keys(sessionStorage)
-            .filter((k) => k.startsWith("sb-"))
-            .forEach((k) => sessionStorage.removeItem(k));
-        } catch (_) {}
-
-        recoverySessionReady = false;
-        recoveryTokenHash = "";
-
+        resetCodeReady = false;
         setLoading(false);
         disableForm();
         form.reset();
         strengthBar.classList.remove("visible");
         strengthLabel.textContent = "";
 
-        window.setTimeout(() => {
-          window.location.href = APP_LOGIN_DEEP_LINK;
-        }, REDIRECT_DELAY_MS);
+        startAppRedirect(continueUrl);
       });
 
-      /* ── recovery session bootstrap ── */
-      async function initializeRecoverySession() {
-        const url = new URL(window.location.href);
-        const hashParams = new URLSearchParams(
-          window.location.hash.replace(/^#/, ""),
-        );
-
-        const authError =
-          url.searchParams.get("error_description") ||
-          hashParams.get("error_description");
-
-        if (authError) {
-          showError(decodeURIComponent(authError));
+      async function initializeAction() {
+        if (!actionCode) {
+          showError("This email link is missing the Firebase action code.");
           disableForm();
           return;
         }
 
-        try {
-          const tokenHash =
-            url.searchParams.get("token_hash") || hashParams.get("token_hash");
-          const type = url.searchParams.get("type") || hashParams.get("type");
+        if (actionMode === "resetPassword") {
+          pageTitle.textContent = "Create New Password";
+          intro.textContent =
+            "Enter a new password for your account. After it is saved, we will send you back to the app to sign in.";
 
-          if (tokenHash) {
-            if (type && type !== "recovery") {
-              throw new Error(
-                "This reset link is not valid for password recovery.",
-              );
-            }
-            recoveryTokenHash = tokenHash;
-            recoverySessionReady = true;
-            return;
-          }
-
-          if (url.searchParams.has("code")) {
-            showError(
-              "This reset link uses an unsupported flow. Please request a new reset email from the app.",
-            );
-            disableForm();
-            return;
-          }
-
-          const accessToken = hashParams.get("access_token");
-          const refreshToken = hashParams.get("refresh_token");
-
-          if (accessToken && refreshToken) {
-            let err;
-            try {
-              ({ error: err } = await withTimeout(
-                supabase.auth.setSession({
-                  access_token: accessToken,
-                  refresh_token: refreshToken,
-                }),
-              ));
-            } catch (e) {
-              throw e;
-            }
-            if (err) throw err;
-          }
-
-          let session, error;
           try {
-            ({
-              data: { session },
-              error,
-            } = await withTimeout(supabase.auth.getSession()));
+            await withTimeout(verifyPasswordResetCode(auth, actionCode));
+            resetCodeReady = true;
           } catch (e) {
-            throw e;
-          }
-          if (error) throw error;
-
-          if (!session) {
-            showError(
-              "This reset link is invalid or expired. Please request a new one.",
-            );
+            showError(firebaseMessage(e));
             disableForm();
-            return;
+          } finally {
+            removeActionParamsFromAddressBar();
           }
-
-          recoverySessionReady = true;
-        } catch (err) {
-          showError(err.message || "Could not open this reset link.");
-          disableForm();
-        } finally {
-          if (!recoveryTokenHash) removeTokensFromAddressBar();
+          return;
         }
-      }
 
-      async function ensureRecoverySession() {
-        if (recoveryTokenHash) {
-          let data, error;
+        if (actionMode === "verifyEmail") {
+          pageTitle.textContent = "Verifying Email";
+          intro.textContent =
+            "Please wait while we confirm your Teka Luxe account.";
+          form.style.display = "none";
+          setLoading(true);
+
           try {
-            ({ data, error } = await withTimeout(
-              supabase.auth.verifyOtp({
-                token_hash: recoveryTokenHash,
-                type: "recovery",
-              }),
-            ));
+            await withTimeout(checkActionCode(auth, actionCode));
+            await withTimeout(applyActionCode(auth, actionCode));
+            showSuccess("Email verified successfully! Opening Teka Luxe…");
+            startAppRedirect(continueUrl);
           } catch (e) {
-            return e.message;
+            showError(firebaseMessage(e));
+            disableForm();
+          } finally {
+            setLoading(false);
+            removeActionParamsFromAddressBar();
           }
-
-          if (error) {
-            return (
-              error.message ||
-              "This reset link is invalid or expired. Please request a new one."
-            );
-          }
-
-          if (data.session) {
-            let sessionError;
-            try {
-              ({ error: sessionError } = await withTimeout(
-                supabase.auth.setSession({
-                  access_token: data.session.access_token,
-                  refresh_token: data.session.refresh_token,
-                }),
-              ));
-            } catch (e) {
-              return e.message;
-            }
-            if (sessionError) {
-              return sessionError.message || "Could not establish a session.";
-            }
-          }
-
-          recoveryTokenHash = "";
-          removeTokensFromAddressBar();
+          return;
         }
 
-        let session, error;
-        try {
-          ({
-            data: { session },
-            error,
-          } = await withTimeout(supabase.auth.getSession()));
-        } catch (e) {
-          return e.message;
-        }
-        if (error) return error.message || "Could not open this reset link.";
-        if (!session)
-          return "This reset link is invalid or expired. Please request a new one.";
-        return "";
+        showError("This email action is not supported.");
+        disableForm();
       }
 
       /* ── UI helpers ── */
@@ -1075,6 +1029,9 @@
         passwordInput.disabled = true;
         confirmPasswordInput.disabled = true;
         submitButton.disabled = true;
+        document
+          .querySelectorAll(".toggle-pw")
+          .forEach((button) => (button.disabled = true));
       }
 
       function showError(text) {
@@ -1088,11 +1045,53 @@
       }
 
       function clearMessage() {
+        window.clearInterval(redirectTimer);
+        redirectPanel.classList.remove("is-visible");
         message.textContent = "";
         message.className = "message";
       }
 
-      function removeTokensFromAddressBar() {
+      function startAppRedirect(targetUrl) {
+        const redirectTarget = targetUrl || APP_LOGIN_DEEP_LINK;
+        let secondsLeft = Math.max(1, Math.ceil(REDIRECT_DELAY_MS / 1000));
+
+        window.clearInterval(redirectTimer);
+        redirectAction.href = redirectTarget;
+        redirectCountdown.textContent = `Opening Teka Luxe in ${secondsLeft} seconds...`;
+        redirectPanel.classList.add("is-visible");
+
+        redirectTimer = window.setInterval(() => {
+          secondsLeft -= 1;
+
+          if (secondsLeft <= 0) {
+            window.clearInterval(redirectTimer);
+            redirectCountdown.textContent = "Opening Teka Luxe now...";
+            window.location.href = redirectTarget;
+            return;
+          }
+
+          redirectCountdown.textContent = `Opening Teka Luxe in ${secondsLeft} seconds...`;
+        }, 1000);
+      }
+
+      function firebaseMessage(error) {
+        switch (error?.code) {
+          case "auth/expired-action-code":
+            return "This email link has expired. Request a new one from the app.";
+          case "auth/invalid-action-code":
+            return "This email link is invalid or has already been used.";
+          case "auth/user-disabled":
+            return "This account has been disabled.";
+          case "auth/user-not-found":
+            return "We could not find an account for this email.";
+          case "auth/weak-password":
+            return "Use a stronger password.";
+          default:
+            return error?.message || "We could not complete the request.";
+        }
+      }
+
+      function removeActionParamsFromAddressBar() {
         if (window.history?.replaceState) {
           window.history.replaceState(
             {},
@@ -1103,7 +1102,7 @@
       }
 
       /* kick off */
-      initializeRecoverySession();
+      initializeAction();
     </script>
   </body>
 </html>
