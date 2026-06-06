@@ -7,85 +7,56 @@ class LoginOptionsRow extends StatelessWidget {
   const LoginOptionsRow({
     required this.rememberMe,
     required this.onRememberChanged,
-    required this.onForgotPassword,
     this.compact = false,
     super.key,
   });
 
   final bool rememberMe;
   final ValueChanged<bool> onRememberChanged;
-  final VoidCallback onForgotPassword;
   final bool compact;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Flexible(
-          child: InkWell(
-            onTap: () => onRememberChanged(!rememberMe),
-            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox.square(
-                  dimension: compact ? 24 : 26,
-                  child: Checkbox(
-                    value: rememberMe,
-                    onChanged: (value) => onRememberChanged(value ?? false),
-                    shape: const CircleBorder(),
-                    side: const BorderSide(
-                      color: AppColors.divider,
-                      width: 1.6,
-                    ),
-                    activeColor: AppColors.primary,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: VisualDensity.compact,
+        InkWell(
+          onTap: () => onRememberChanged(!rememberMe),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox.square(
+                dimension: compact ? 23 : 25,
+                child: Checkbox(
+                  value: rememberMe,
+                  onChanged: (value) => onRememberChanged(value ?? false),
+                  shape: const RoundedRectangleBorder(),
+                  side: BorderSide(
+                    color: palette.text,
+                    width: 1.2,
                   ),
+                  checkColor: palette.onAccent,
+                  activeColor: palette.accent,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
                 ),
-                const SizedBox(width: AppSizes.xs),
-                Flexible(
-                  child: Text(
-                    l10n.rememberMe,
-                    maxLines: 1,
-                    overflow: TextOverflow.visible,
-                    style: AppTextStyles.bodyLg.copyWith(
-                      color: AppColors.textStrong,
-                      fontSize: compact ? 11 : 12,
-                      height: 1.2,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Flexible(
-          flex: 0,
-          child: TextButton(
-            onPressed: onForgotPassword,
-            style: AppButtonStyles.ghost().copyWith(
-              minimumSize: WidgetStateProperty.all(Size.zero),
-              padding: WidgetStateProperty.all(EdgeInsets.zero),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-            child: Text(
-              l10n.forgotPassword,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.label.copyWith(
-                color: AppColors.primary,
-                fontSize: compact ? 10 : 11,
-                fontWeight: FontWeight.w800,
-                height: 1.2,
-                letterSpacing: .2,
               ),
-            ),
+              const SizedBox(width: AppSizes.sm),
+              Text(
+                l10n.rememberMe,
+                maxLines: 1,
+                overflow: TextOverflow.visible,
+                style: AppTextStyles.bodyLg.copyWith(
+                  color: palette.text,
+                  fontSize: compact ? 14 : 15,
+                  height: 1.2,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -8,6 +8,9 @@ class RouteNames {
   static const register = 'register';
   static const forgotPassword = 'forgot-password';
   static const verifyEmail = 'verify-email';
+  static const profile = 'profile';
+  static const orders = 'orders';
+  static const search = 'search';
 
   static const startupPath = '/';
   static const homePath = '/home';
@@ -16,4 +19,7 @@ class RouteNames {
   static const registerPath = '/register';
   static const forgotPasswordPath = '/forgot-password';
   static const verifyEmailPath = '/verify-email';
+  static const profilePath = '/profile';
+  static const ordersPath = '/orders';
+  static const searchPath = '/search';
 }

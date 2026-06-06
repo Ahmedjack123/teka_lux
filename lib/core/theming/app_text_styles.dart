@@ -7,14 +7,14 @@ class AppTextStyles {
   const AppTextStyles._();
 
   static TextStyle get _display {
-    return GoogleFonts.spaceGrotesk(
+    return GoogleFonts.bebasNeue(
       color: AppColors.textPrimary,
       letterSpacing: 0,
     );
   }
 
   static TextStyle get _sans {
-    return GoogleFonts.inter(
+    return GoogleFonts.spaceGrotesk(
       color: AppColors.textPrimary,
       letterSpacing: 0,
     );
@@ -22,33 +22,33 @@ class AppTextStyles {
 
   static TextStyle get display {
     return _display.copyWith(
-      fontSize: 44,
-      height: 1.02,
-      fontWeight: FontWeight.w800,
+      fontSize: 64,
+      height: .92,
+      fontWeight: FontWeight.w400,
     );
   }
 
   static TextStyle get h1 {
     return _display.copyWith(
-      fontSize: 34,
-      height: 1.08,
-      fontWeight: FontWeight.w800,
+      fontSize: 46,
+      height: .95,
+      fontWeight: FontWeight.w400,
     );
   }
 
   static TextStyle get h2 {
     return _display.copyWith(
-      fontSize: 26,
-      height: 1.16,
-      fontWeight: FontWeight.w700,
+      fontSize: 34,
+      height: 1,
+      fontWeight: FontWeight.w400,
     );
   }
 
   static TextStyle get h3 {
     return _display.copyWith(
-      fontSize: 21,
-      height: 1.24,
-      fontWeight: FontWeight.w700,
+      fontSize: 28,
+      height: 1.05,
+      fontWeight: FontWeight.w400,
     );
   }
 

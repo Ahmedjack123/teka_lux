@@ -166,16 +166,22 @@ abstract class AppLocalizations {
   /// **'Discover a curated collection of modern essentials that blend simplicity, quality, and confidence.'**
   String get onboardingLuxeDescription;
 
+  /// No description provided for @brandShort.
+  ///
+  /// In en, this message translates to:
+  /// **'TEKA'**
+  String get brandShort;
+
   /// No description provided for @loginTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome'**
+  /// **'WELCOME'**
   String get loginTitle;
 
   /// No description provided for @loginSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Please sign in to continue'**
+  /// **'Sign in to access your exclusive archive.'**
   String get loginSubtitle;
 
   /// No description provided for @emailHint.
@@ -184,11 +190,29 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get emailHint;
 
+  /// No description provided for @loginEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'archive@teka.com'**
+  String get loginEmailHint;
+
+  /// No description provided for @registerEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME@EXAMPLE.COM'**
+  String get registerEmailHint;
+
   /// No description provided for @passwordHint.
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get passwordHint;
+
+  /// No description provided for @passwordPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'••••••••'**
+  String get passwordPlaceholder;
 
   /// No description provided for @rememberMe.
   ///
@@ -199,73 +223,85 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
-  /// **'Forgot Password?'**
+  /// **'Forgot?'**
   String get forgotPassword;
 
   /// No description provided for @signIn.
   ///
   /// In en, this message translates to:
-  /// **'Sign In'**
+  /// **'LOG IN'**
   String get signIn;
 
   /// No description provided for @signUp.
   ///
   /// In en, this message translates to:
-  /// **'Sign Up'**
+  /// **'SIGN UP'**
   String get signUp;
 
   /// No description provided for @noAccount.
   ///
   /// In en, this message translates to:
-  /// **'Don\'t have an account?'**
+  /// **'New to the collective?'**
   String get noAccount;
 
   /// No description provided for @dividerOr.
   ///
   /// In en, this message translates to:
-  /// **'OR'**
+  /// **'OR CONTINUE WITH'**
   String get dividerOr;
 
   /// No description provided for @continueWithGoogle.
   ///
   /// In en, this message translates to:
-  /// **'Continue with Google'**
+  /// **'Google'**
   String get continueWithGoogle;
 
   /// No description provided for @registerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Start Your Luxe Wardrobe'**
+  /// **'CREATE ACCOUNT'**
   String get registerTitle;
 
   /// No description provided for @registerSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Create your account to save favorites and checkout faster.'**
+  /// **''**
   String get registerSubtitle;
+
+  /// No description provided for @fullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullNameLabel;
+
+  /// No description provided for @phoneNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumberLabel;
 
   /// No description provided for @fullNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Full name'**
+  /// **'ENTER YOUR NAME'**
   String get fullNameHint;
 
   /// No description provided for @phoneNumberHint.
   ///
   /// In en, this message translates to:
-  /// **'Phone number'**
+  /// **'091XXXXXXX'**
   String get phoneNumberHint;
 
   /// No description provided for @confirmPasswordHint.
   ///
   /// In en, this message translates to:
-  /// **'Confirm password'**
+  /// **'CONFIRM PASSWORD'**
   String get confirmPasswordHint;
 
   /// No description provided for @createAccount.
   ///
   /// In en, this message translates to:
-  /// **'Create Account'**
+  /// **'SIGN UP'**
   String get createAccount;
 
   /// No description provided for @alreadyHaveAccount.
@@ -274,28 +310,64 @@ abstract class AppLocalizations {
   /// **'Already have an account?'**
   String get alreadyHaveAccount;
 
+  /// No description provided for @agreeToTermsPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the'**
+  String get agreeToTermsPrefix;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @andThe.
+  ///
+  /// In en, this message translates to:
+  /// **'and the'**
+  String get andThe;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy.'**
+  String get privacyPolicy;
+
+  /// No description provided for @validationTermsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree to the terms and privacy policy to continue.'**
+  String get validationTermsRequired;
+
   /// No description provided for @forgotPasswordTitle.
   ///
   /// In en, this message translates to:
-  /// **'Forgot Password'**
+  /// **'RESET PASSWORD'**
   String get forgotPasswordTitle;
 
   /// No description provided for @forgotPasswordDescription.
   ///
   /// In en, this message translates to:
-  /// **'Enter the email address associated with your account, and we’ll send you a link to reset your password.'**
+  /// **'Enter your registered email address to receive a secure recovery link for your account.'**
   String get forgotPasswordDescription;
+
+  /// No description provided for @resetPasswordAccessLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCESS'**
+  String get resetPasswordAccessLabel;
 
   /// No description provided for @emailAddressHint.
   ///
   /// In en, this message translates to:
-  /// **'Email Address'**
+  /// **'user@teka.studio'**
   String get emailAddressHint;
 
   /// No description provided for @sendResetLink.
   ///
   /// In en, this message translates to:
-  /// **'SEND RESET LINK'**
+  /// **'SEND LINK'**
   String get sendResetLink;
 
   /// No description provided for @backToLogin.
@@ -505,13 +577,13 @@ abstract class AppLocalizations {
   /// No description provided for @emailVerificationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Verify Your Email'**
+  /// **'VERIFY EMAIL'**
   String get emailVerificationTitle;
 
   /// No description provided for @emailVerificationDescription.
   ///
   /// In en, this message translates to:
-  /// **'We sent a verification link to your email. Open it, then return here and we’ll continue automatically.'**
+  /// **'Open the secure link we sent to your inbox, then return here to activate your account.'**
   String get emailVerificationDescription;
 
   /// No description provided for @emailVerificationChecking.

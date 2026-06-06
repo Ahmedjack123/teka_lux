@@ -14,27 +14,28 @@ class ForgotPasswordHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           l10n.forgotPasswordTitle,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.start,
           style: AppTextStyles.display.copyWith(
-            color: AppColors.textStrong,
-            fontSize: compact ? 32 : 38,
-            height: 1.1,
-            fontWeight: FontWeight.w700,
+            color: palette.text,
+            fontSize: compact ? 54 : 62,
+            height: .9,
           ),
         ),
         SizedBox(height: compact ? AppSizes.md : AppSizes.lg),
         Text(
           l10n.forgotPasswordDescription,
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.start,
           style: AppTextStyles.bodyLg.copyWith(
-            color: AppColors.textBody,
-            fontSize: compact ? 15 : 17,
-            height: 1.55,
+            color: palette.muted,
+            fontSize: compact ? 18 : 20,
+            height: 1.38,
           ),
         ),
       ],

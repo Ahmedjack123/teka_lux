@@ -2,7 +2,7 @@ import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/result.dart';
 import '../repositories/auth_repository.dart';
 
-final class ResetPasswordUseCase extends UseCase<void, ResetPasswordParams> {
+class ResetPasswordUseCase extends UseCase<void, ResetPasswordParams> {
   const ResetPasswordUseCase(this._repository);
 
   final IAuthRepository _repository;
@@ -13,7 +13,7 @@ final class ResetPasswordUseCase extends UseCase<void, ResetPasswordParams> {
   }
 }
 
-final class ResetPasswordParams {
+class ResetPasswordParams {
   const ResetPasswordParams({required this.email});
 
   final String email;

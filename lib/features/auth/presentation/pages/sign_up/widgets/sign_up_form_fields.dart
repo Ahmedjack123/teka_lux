@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/theming/theming.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
-import '../../../../../../shared/widgets/forms/app_text_field.dart';
+import '../../../../../../shared/widgets/forms/archive_text_field.dart';
 
 class SignUpFormFields extends StatelessWidget {
   const SignUpFormFields({
@@ -47,76 +47,62 @@ class SignUpFormFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final fieldPadding = EdgeInsets.symmetric(
-      horizontal: AppSizes.lg,
-      vertical: compact ? 14 : 16,
-    );
-    final fieldGap = SizedBox(height: compact ? AppSizes.sm : AppSizes.md);
+    final fieldGap = SizedBox(height: compact ? AppSizes.lg : AppSizes.xl);
 
     return Column(
       children: [
-        AppTextField(
+        ArchiveTextField(
           controller: nameController,
+          label: l10n.fullNameLabel,
           hint: l10n.fullNameHint,
           textInputAction: TextInputAction.next,
           errorText: nameError,
           onChanged: onNameChanged,
           enabled: enabled,
-          borderRadius: AppSizes.radiusLg,
-          fillColor: AppColors.inputFill,
-          contentPadding: fieldPadding,
         ),
         fieldGap,
-        AppTextField(
+        ArchiveTextField(
           controller: phoneNumberController,
+          label: l10n.phoneNumberLabel,
           hint: l10n.phoneNumberHint,
           keyboardType: TextInputType.phone,
           textInputAction: TextInputAction.next,
           errorText: phoneNumberError,
           onChanged: onPhoneNumberChanged,
           enabled: enabled,
-          borderRadius: AppSizes.radiusLg,
-          fillColor: AppColors.inputFill,
-          contentPadding: fieldPadding,
         ),
         fieldGap,
-        AppTextField(
+        ArchiveTextField(
           controller: emailController,
-          hint: l10n.emailHint,
+          label: l10n.emailHint,
+          hint: l10n.registerEmailHint,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           errorText: emailError,
           onChanged: onEmailChanged,
           enabled: enabled,
-          borderRadius: AppSizes.radiusLg,
-          fillColor: AppColors.inputFill,
-          contentPadding: fieldPadding,
         ),
         fieldGap,
-        AppTextField(
+        ArchiveTextField(
           controller: passwordController,
-          hint: l10n.passwordHint,
+          label: l10n.passwordHint,
+          hint: l10n.passwordPlaceholder,
           obscureText: true,
           textInputAction: TextInputAction.next,
           errorText: passwordError,
           onChanged: onPasswordChanged,
           enabled: enabled,
-          borderRadius: AppSizes.radiusLg,
-          fillColor: AppColors.inputFill,
-          contentPadding: fieldPadding,
         ),
         fieldGap,
-        AppTextField(
+        ArchiveTextField(
           controller: confirmPasswordController,
-          hint: l10n.confirmPasswordHint,
+          label: l10n.confirmPasswordHint,
+          hint: l10n.passwordPlaceholder,
           obscureText: true,
           textInputAction: TextInputAction.done,
           errorText: confirmPasswordError,
           onChanged: onConfirmPasswordChanged,
           enabled: enabled,
-          borderRadius: AppSizes.radiusLg,
-          fillColor: AppColors.inputFill,
-          contentPadding: fieldPadding,
         ),
       ],
     );

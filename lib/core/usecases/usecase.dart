@@ -1,9 +1,9 @@
 import '../utils/result.dart';
 
-abstract class UseCase<Output, Params> {
+abstract class UseCase<T, P> {
   const UseCase();
 
-  Future<Result<Output>> call(Params params);
+  Future<Result<T>> call(P params);
 }
 
 final class NoParams {

@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/route_names.dart';
+import '../../../../injection.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import '../providers/onboarding_provider.dart';
+import '../../data/models/onboarding_slide_model.dart';
+import '../bloc/onboarding_cubit.dart';
 import '../widgets/onboarding_scaffold.dart';
 
-class OnboardingPage extends ConsumerStatefulWidget {
+class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
-  ConsumerState<OnboardingPage> createState() => _OnboardingPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<OnboardingCubit>(),
+      child: const _OnboardingView(),
+    );
+  }
 }
 
-class _OnboardingPageState extends ConsumerState<OnboardingPage> {
+class _OnboardingView extends StatefulWidget {
+  const _OnboardingView();
+
+  @override
+  State<_OnboardingView> createState() => _OnboardingViewState();
+}
+
+class _OnboardingViewState extends State<_OnboardingView> {
   late final PageController _pageController;
   int _currentIndex = 0;
 
@@ -31,13 +45,12 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   }
 
   Future<void> _completeOnboarding() async {
-    await ref.read(onboardingControllerProvider.notifier).complete();
+    final completed = await context.read<OnboardingCubit>().complete();
     if (!mounted) {
       return;
     }
 
-    final completionState = ref.read(onboardingControllerProvider);
-    if (completionState.hasError) {
+    if (!completed) {
       final l10n = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.onboardingSaveError)),
@@ -62,20 +75,22 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final slides = ref.watch(onboardingSlidesProvider);
-    final completionState = ref.watch(onboardingControllerProvider);
-    final isSaving = completionState.isLoading;
+    const slides = OnboardingSlideModel.defaults;
 
-    return OnboardingScaffold(
-      slides: slides,
-      pageController: _pageController,
-      currentIndex: _currentIndex,
-      isSaving: isSaving,
-      onPageChanged: (index) {
-        setState(() => _currentIndex = index);
+    return BlocBuilder<OnboardingCubit, OnboardingState>(
+      builder: (context, state) {
+        return OnboardingScaffold(
+          slides: slides,
+          pageController: _pageController,
+          currentIndex: _currentIndex,
+          isSaving: state.isSaving,
+          onPageChanged: (index) {
+            setState(() => _currentIndex = index);
+          },
+          onNext: () => _goToNextPage(slides.length),
+          onSkip: _completeOnboarding,
+        );
       },
-      onNext: () => _goToNextPage(slides.length),
-      onSkip: _completeOnboarding,
     );
   }
 }

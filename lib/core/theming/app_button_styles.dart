@@ -14,16 +14,17 @@ class AppButtonStyles {
     return ElevatedButton.styleFrom(
       backgroundColor: AppColors.primary,
       disabledBackgroundColor: AppColors.primarySoft.withValues(alpha: .45),
-      foregroundColor: AppColors.textInverse,
-      disabledForegroundColor: AppColors.textInverse.withValues(alpha: .72),
-      elevation: 1,
+      foregroundColor: AppColors.primaryDark,
+      disabledForegroundColor: AppColors.primaryDark.withValues(alpha: .55),
+      elevation: 0,
       shadowColor: AppColors.primary.withValues(alpha: .24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
       textStyle: AppTextStyles.label.copyWith(
-        fontSize: fontSize,
-        letterSpacing: .2,
+        fontSize: fontSize + 4,
+        fontWeight: FontWeight.w900,
+        letterSpacing: 1.4,
       ),
     );
   }

@@ -1,4 +1,6 @@
-class UserEntity {
+import 'package:equatable/equatable.dart';
+
+class UserEntity extends Equatable {
   const UserEntity({
     required this.uid,
     required this.email,
@@ -16,4 +18,14 @@ class UserEntity {
   final String? photoUrl;
 
   bool get hasPhoto => photoUrl != null && photoUrl!.trim().isNotEmpty;
+
+  @override
+  List<Object?> get props => [
+        uid,
+        email,
+        name,
+        emailVerified,
+        phoneNumber,
+        photoUrl,
+      ];
 }

@@ -3,7 +3,7 @@ import '../../../../core/utils/result.dart';
 import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
 
-final class RegisterUseCase extends UseCase<UserEntity, RegisterParams> {
+class RegisterUseCase extends UseCase<UserEntity, RegisterParams> {
   const RegisterUseCase(this._repository);
 
   final IAuthRepository _repository;
@@ -19,7 +19,7 @@ final class RegisterUseCase extends UseCase<UserEntity, RegisterParams> {
   }
 }
 
-final class RegisterParams {
+class RegisterParams {
   const RegisterParams({
     required this.email,
     required this.password,

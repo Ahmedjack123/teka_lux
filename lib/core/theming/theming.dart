@@ -1,3 +1,4 @@
+export 'app_auth_palette.dart';
 export 'app_breakpoints.dart';
 export 'app_button_styles.dart';
 export 'app_colors.dart';

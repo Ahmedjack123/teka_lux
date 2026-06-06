@@ -122,6 +122,7 @@ final class FirebaseAuthRemoteDatasource implements AuthRemoteDatasource {
       }
 
       await user.updateDisplayName(name.trim());
+      await user.sendEmailVerification();
       await user.reload();
 
       final model =

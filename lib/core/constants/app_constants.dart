@@ -1,14 +1,9 @@
-class AppConstants {
-  const AppConstants._();
-
-  static const appName = 'Teka Luxe';
-}
-
 class AppAssets {
   const AppAssets._();
 
-  static const fullLogo = 'assets/images/logos/full_logo.png';
-  static const logoIcon = 'assets/images/logos/logo_icon.png';
+  static const googleLight = 'assets/images/logos/android_light_rd_na.svg';
+  static const googleDark = 'assets/images/logos/android_dark_rd_na.svg';
+  static const resetPassword = 'assets/images/reset_password/image.png';
 
   static const onboardingFirst =
       'assets/images/onboarding/first_onboarding.png';

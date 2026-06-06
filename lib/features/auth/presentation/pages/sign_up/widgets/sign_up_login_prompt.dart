@@ -16,6 +16,7 @@ class SignUpLoginPrompt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Wrap(
       alignment: WrapAlignment.center,
@@ -24,9 +25,10 @@ class SignUpLoginPrompt extends StatelessWidget {
         Text(
           l10n.alreadyHaveAccount,
           style: AppTextStyles.bodyLg.copyWith(
-            color: AppColors.textPrimary,
-            fontSize: compact ? 14 : 15,
+            color: palette.muted,
+            fontSize: compact ? 15 : 17,
             height: 1.35,
+            letterSpacing: .8,
           ),
         ),
         TextButton(
@@ -35,10 +37,13 @@ class SignUpLoginPrompt extends StatelessWidget {
           child: Text(
             l10n.signIn,
             style: AppTextStyles.label.copyWith(
-              color: AppColors.primary,
-              fontSize: compact ? 14 : 15,
+              color: palette.text,
+              fontSize: compact ? 15 : 17,
               fontWeight: FontWeight.w800,
-              letterSpacing: .2,
+              letterSpacing: .8,
+              decoration: TextDecoration.underline,
+              decorationColor: palette.text,
+              decorationThickness: 1.5,
             ),
           ),
         ),

@@ -55,16 +55,6 @@ final class AuthException extends AppException {
   final AuthErrorCode errorCode;
   final String? firebaseCode;
 
-  AuthFailure toFailure() {
-    return AuthFailure(
-      errorCode: errorCode,
-      firebaseCode: firebaseCode,
-      debugMessage: debugMessage,
-      cause: cause,
-      stackTrace: stackTrace,
-    );
-  }
-
   @override
   String localizedMessage(AppLocalizations l10n) {
     return errorCode.localizedMessage(l10n);
@@ -73,5 +63,14 @@ final class AuthException extends AppException {
   @override
   String toString() {
     return 'AuthException(firebaseCode: ${firebaseCode ?? errorCode.firebaseCode})';
+  }
+
+  AuthFailure toFailure() {
+    return AuthFailure(
+      errorCode: errorCode,
+      debugMessage: debugMessage,
+      cause: cause,
+      stackTrace: stackTrace,
+    );
   }
 }

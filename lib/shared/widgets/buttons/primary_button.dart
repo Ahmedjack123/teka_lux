@@ -10,6 +10,7 @@ class PrimaryButton extends StatelessWidget {
     this.icon,
     this.fullWidth = true,
     this.height,
+    this.radius,
     super.key,
   });
 
@@ -19,6 +20,7 @@ class PrimaryButton extends StatelessWidget {
   final IconData? icon;
   final bool fullWidth;
   final double? height;
+  final double? radius;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +29,12 @@ class PrimaryButton extends StatelessWidget {
       height: height ?? AppSizes.buttonHeight,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
-        style: AppButtonStyles.primary(),
+        style: AppButtonStyles.primary(radius: radius ?? AppSizes.radiusLg),
         child: _ButtonContent(
           label: label,
           icon: icon,
           isLoading: isLoading,
-          loadingColor: AppColors.textInverse,
+          loadingColor: AppColors.primaryDark,
         ),
       ),
     );

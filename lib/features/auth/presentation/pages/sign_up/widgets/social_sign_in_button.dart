@@ -1,8 +1,8 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../../../core/theming/app_colors.dart';
+import '../../../../../../core/constants/app_constants.dart';
+import '../../../../../../core/theming/app_auth_palette.dart';
 import '../../../../../../core/theming/app_sizes.dart';
 import '../../../../../../core/theming/app_text_styles.dart';
 
@@ -22,40 +22,45 @@ class SocialSignInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppAuthPalette.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return SizedBox(
       width: double.infinity,
-      height: compact ? 52 : 54,
+      height: compact ? 50 : 58,
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: AppColors.textPrimary,
-          side: const BorderSide(color: AppColors.divider, width: 1.4),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radiusPill),
-          ),
+          backgroundColor: Colors.transparent,
+          foregroundColor: palette.text,
+          side: BorderSide(color: palette.text, width: 1.2),
+          shape: const RoundedRectangleBorder(),
           textStyle: AppTextStyles.label.copyWith(
-            fontSize: compact ? 13 : 14,
-            fontWeight: FontWeight.w700,
-            letterSpacing: .2,
+            fontSize: compact ? 15 : 16,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 4,
           ),
         ),
         child: isLoading
-            ? const SizedBox.square(
+            ? SizedBox.square(
                 dimension: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.4,
-                  color: AppColors.primary,
+                  color: palette.accent,
                 ),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const _GoogleMark(),
+                  SvgPicture.asset(
+                    isDark ? AppAssets.googleDark : AppAssets.googleLight,
+                    width: compact ? 24 : 28,
+                    height: compact ? 24 : 28,
+                  ),
                   const SizedBox(width: AppSizes.sm),
                   Flexible(
                     child: Text(
-                      label,
+                      label.toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -65,62 +70,4 @@ class SocialSignInButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class _GoogleMark extends StatelessWidget {
-  const _GoogleMark();
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox.square(
-      dimension: 22,
-      child: CustomPaint(painter: _GoogleMarkPainter()),
-    );
-  }
-}
-
-class _GoogleMarkPainter extends CustomPainter {
-  const _GoogleMarkPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width * .36;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-    final stroke = size.width * .14;
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.square
-      ..strokeWidth = stroke;
-
-    void arc(Color color, double startDegrees, double sweepDegrees) {
-      paint.color = color;
-      canvas.drawArc(
-        rect,
-        startDegrees * math.pi / 180,
-        sweepDegrees * math.pi / 180,
-        false,
-        paint,
-      );
-    }
-
-    arc(const Color(0xFFEA4335), 205, 105);
-    arc(const Color(0xFFFBBC05), 150, 58);
-    arc(const Color(0xFF34A853), 48, 102);
-    arc(const Color(0xFF4285F4), -38, 86);
-
-    final barPaint = Paint()
-      ..color = const Color(0xFF4285F4)
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.square
-      ..strokeWidth = stroke;
-    canvas.drawLine(
-      Offset(center.dx, center.dy),
-      Offset(size.width * .86, center.dy),
-      barPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

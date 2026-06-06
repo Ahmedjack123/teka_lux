@@ -6,6 +6,9 @@ import '../../features/auth/presentation/pages/login/login_page.dart';
 import '../../features/auth/presentation/pages/sign_up/sign_up_page.dart';
 import '../../features/auth/presentation/pages/verify_email/verify_email_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/orders/presentation/pages/orders_page.dart';
+import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/search/presentation/pages/search_page.dart';
 import '../../features/startup/presentation/pages/onboarding_page.dart';
 import '../../features/startup/presentation/pages/startup_page.dart';
 import 'route_names.dart';
@@ -76,6 +79,27 @@ class AppRouter {
           state,
           VerifyEmailPage(emailJustSent: state.extra == true),
         );
+      },
+    ),
+    GoRoute(
+      path: RouteNames.profilePath,
+      name: RouteNames.profile,
+      pageBuilder: (context, state) {
+        return _fadePage(state, const ProfilePage());
+      },
+    ),
+    GoRoute(
+      path: RouteNames.ordersPath,
+      name: RouteNames.orders,
+      pageBuilder: (context, state) {
+        return _fadePage(state, const OrdersPage());
+      },
+    ),
+    GoRoute(
+      path: RouteNames.searchPath,
+      name: RouteNames.search,
+      pageBuilder: (context, state) {
+        return _fadePage(state, const SearchPage());
       },
     ),
   ];

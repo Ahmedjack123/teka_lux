@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '640195549107',
     projectId: 'teka-luxe',
     storageBucket: 'teka-luxe.firebasestorage.app',
-    androidClientId: '640195549107-ihpetiktqo7uagh8s2ddmacd7edf3th8.apps.googleusercontent.com',
-    iosClientId: '640195549107-fg4g6goj8ag23vdm10m3294eb87ecov3.apps.googleusercontent.com',
+    androidClientId:
+        '640195549107-ihpetiktqo7uagh8s2ddmacd7edf3th8.apps.googleusercontent.com',
+    iosClientId:
+        '640195549107-fg4g6goj8ag23vdm10m3294eb87ecov3.apps.googleusercontent.com',
     iosBundleId: 'com.example.tekaLuxe',
   );
 }

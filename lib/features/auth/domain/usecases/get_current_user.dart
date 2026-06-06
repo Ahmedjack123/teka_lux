@@ -3,7 +3,7 @@ import '../../../../core/utils/result.dart';
 import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
 
-final class GetCurrentUserUseCase extends UseCase<UserEntity?, NoParams> {
+class GetCurrentUserUseCase extends UseCase<UserEntity?, NoParams> {
   const GetCurrentUserUseCase(this._repository);
 
   final IAuthRepository _repository;

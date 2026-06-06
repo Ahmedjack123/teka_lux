@@ -31,6 +31,7 @@ class VerifyEmailScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
     final horizontalPadding = DeviceHelper.horizontalPadding(context);
     final canResend =
         !isResending && !isVerified && resendSecondsRemaining == 0;
@@ -39,14 +40,15 @@ class VerifyEmailScaffold extends StatelessWidget {
         : l10n.emailVerificationResend;
 
     return Scaffold(
-      backgroundColor: AppColors.authBackground,
+      backgroundColor: palette.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: horizontalPadding,
-              vertical: AppSizes.xl,
+              vertical: AppSizes.lg,
             ),
+            physics: const ClampingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: DeviceHelper.value(
@@ -56,63 +58,75 @@ class VerifyEmailScaffold extends StatelessWidget {
                   desktop: 600,
                 ),
               ),
-              child: Container(
-                padding: const EdgeInsets.all(AppSizes.xl),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceElevated,
-                  borderRadius: BorderRadius.circular(AppSizes.radiusXl),
-                  border: Border.all(color: AppColors.divider),
-                ),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 260),
-                  switchInCurve: Curves.easeOutCubic,
-                  switchOutCurve: Curves.easeInCubic,
-                  child: isVerified
-                      ? _VerificationSuccess(onNext: onNextToHome)
-                      : Column(
-                          key: const ValueKey('verify-email-form'),
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              l10n.emailVerificationTitle,
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.h1.copyWith(
-                                color: AppColors.textStrong,
-                              ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 260),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                child: isVerified
+                    ? _VerificationSuccess(onNext: onNextToHome)
+                    : Column(
+                        key: const ValueKey('verify-email-form'),
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            l10n.brandShort,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.h2.copyWith(
+                              color: palette.text,
+                              fontSize: 36,
                             ),
+                          ),
+                          const SizedBox(height: AppSizes.xxl),
+                          Text(
+                            l10n.emailVerificationTitle,
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.display.copyWith(
+                              color: palette.text,
+                              fontSize: 48,
+                              height: 1.0,
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.md),
+                          Container(
+                            width: 120,
+                            height: 8,
+                            alignment: Alignment.centerLeft,
+                            color: palette.accent,
+                          ),
+                          const SizedBox(height: AppSizes.lg),
+                          Text(
+                            l10n.emailVerificationDescription,
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.bodyLg.copyWith(
+                              color: palette.muted,
+                              fontSize: 16,
+                              height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.xl),
+                          if (message != null) ...[
+                            _StatusText(message!, color: palette.success),
                             const SizedBox(height: AppSizes.md),
-                            Text(
-                              l10n.emailVerificationDescription,
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.body.copyWith(
-                                color: AppColors.textBody,
-                                height: 1.55,
-                              ),
-                            ),
-                            const SizedBox(height: AppSizes.xl),
-                            if (message != null) ...[
-                              _StatusText(message!, color: AppColors.success),
-                              const SizedBox(height: AppSizes.md),
-                            ],
-                            if (errorMessage != null) ...[
-                              _StatusText(errorMessage!,
-                                  color: AppColors.error),
-                              const SizedBox(height: AppSizes.md),
-                            ],
-                            PrimaryButton(
-                              label: resendLabel,
-                              onPressed: canResend ? onResend : null,
-                              isLoading: isResending,
-                            ),
-                            const SizedBox(height: AppSizes.md),
-                            SecondaryButton(
-                              label: l10n.emailVerificationBackToLogin,
-                              onPressed: onBackToLogin,
-                            ),
                           ],
-                        ),
-                ),
+                          if (errorMessage != null) ...[
+                            _StatusText(errorMessage!, color: palette.error),
+                            const SizedBox(height: AppSizes.md),
+                          ],
+                          PrimaryButton(
+                            label: resendLabel,
+                            onPressed: canResend ? onResend : null,
+                            isLoading: isResending,
+                            height: 56,
+                            radius: 0,
+                          ),
+                          const SizedBox(height: AppSizes.md),
+                          SecondaryButton(
+                            label: l10n.emailVerificationBackToLogin,
+                            onPressed: onBackToLogin,
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),
@@ -130,6 +144,7 @@ class _VerificationSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Column(
       key: const ValueKey('verify-email-success'),
@@ -143,32 +158,35 @@ class _VerificationSuccess extends StatelessWidget {
             return Transform.scale(scale: value, child: child);
           },
           child: Container(
-            width: 92,
-            height: 92,
+            width: 80,
+            height: 80,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: .12),
-              shape: BoxShape.circle,
+              color: palette.accent,
+              shape: BoxShape.rectangle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.check_rounded,
-              color: AppColors.primaryDark,
-              size: 54,
+              color: palette.onAccent,
+              size: 44,
             ),
           ),
         ),
-        const SizedBox(height: AppSizes.xl),
+        const SizedBox(height: AppSizes.lg),
         Text(
           l10n.emailVerificationSuccessTitle,
           textAlign: TextAlign.center,
-          style: AppTextStyles.h1.copyWith(color: AppColors.textStrong),
+          style: AppTextStyles.display.copyWith(
+            color: palette.text,
+            fontSize: 42,
+          ),
         ),
         const SizedBox(height: AppSizes.md),
         Text(
           l10n.emailVerificationSuccessDescription,
           textAlign: TextAlign.center,
           style: AppTextStyles.body.copyWith(
-            color: AppColors.textBody,
-            height: 1.55,
+            color: palette.muted,
+            height: 1.5,
           ),
         ),
         const SizedBox(height: AppSizes.xl),
@@ -176,6 +194,7 @@ class _VerificationSuccess extends StatelessWidget {
           label: l10n.emailVerificationNext,
           icon: Icons.arrow_forward_rounded,
           onPressed: onNext,
+          radius: 0,
         ),
       ],
     );
@@ -193,7 +212,7 @@ class _StatusText extends StatelessWidget {
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: AppTextStyles.caption.copyWith(color: color, height: 1.35),
+      style: AppTextStyles.label.copyWith(color: color, height: 1.35),
     );
   }
 }

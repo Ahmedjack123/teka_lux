@@ -20,16 +20,24 @@ class SecondaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = AppAuthPalette.of(context);
+
     return SizedBox(
       width: fullWidth ? double.infinity : null,
       height: AppSizes.buttonHeight,
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
-        style: AppButtonStyles.secondary(),
+        style: AppButtonStyles.secondary(radius: 0).copyWith(
+          foregroundColor: WidgetStateProperty.all(palette.text),
+          side: WidgetStateProperty.all(
+            BorderSide(color: palette.text, width: 1.2),
+          ),
+        ),
         child: _SecondaryButtonContent(
           label: label,
           icon: icon,
           isLoading: isLoading,
+          loadingColor: palette.accent,
         ),
       ),
     );
@@ -40,21 +48,23 @@ class _SecondaryButtonContent extends StatelessWidget {
   const _SecondaryButtonContent({
     required this.label,
     required this.isLoading,
+    required this.loadingColor,
     this.icon,
   });
 
   final String label;
   final bool isLoading;
+  final Color loadingColor;
   final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const SizedBox.square(
+      return SizedBox.square(
         dimension: 22,
         child: CircularProgressIndicator(
           strokeWidth: 2.4,
-          color: AppColors.primary,
+          color: loadingColor,
         ),
       );
     }

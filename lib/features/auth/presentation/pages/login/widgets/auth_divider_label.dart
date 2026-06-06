@@ -9,21 +9,23 @@ class AuthDividerLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Row(
       children: [
-        const Expanded(child: Divider(color: AppColors.divider)),
+        Expanded(child: Divider(color: palette.line)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
           child: Text(
             l10n.dividerOr,
             style: AppTextStyles.label.copyWith(
-              color: AppColors.textPrimary,
-              letterSpacing: 3,
+              color: palette.faint,
+              fontSize: 13,
+              letterSpacing: 2.5,
             ),
           ),
         ),
-        const Expanded(child: Divider(color: AppColors.divider)),
+        Expanded(child: Divider(color: palette.line)),
       ],
     );
   }

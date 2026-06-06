@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/theming/theming.dart';
 import '../../../../../../l10n/generated/app_localizations.dart';
+import '../../../../../../shared/widgets/forms/archive_text_field.dart';
 
 class ForgotPasswordForm extends StatelessWidget {
   const ForgotPasswordForm({
@@ -28,39 +29,20 @@ class ForgotPasswordForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final palette = AppAuthPalette.of(context);
 
     return Column(
       children: [
-        TextFormField(
+        ArchiveTextField(
           controller: emailController,
+          label: l10n.emailHint,
+          hint: l10n.emailAddressHint,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
           onChanged: onEmailChanged,
           enabled: !isSubmitting,
-          style: AppTextStyles.bodyLg.copyWith(
-            color: AppColors.textPrimary,
-            fontSize: compact ? 16 : 18,
-            height: 1.35,
-          ),
-          decoration: InputDecoration(
-            hintText: l10n.emailAddressHint,
-            errorText: emailError,
-            hintStyle: AppTextStyles.bodyLg.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: compact ? 16 : 18,
-            ),
-            filled: true,
-            fillColor: AppColors.surfaceElevated,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: compact ? AppSizes.lg : AppSizes.xl,
-              vertical: compact ? 16 : 18,
-            ),
-            border: _border(),
-            enabledBorder: _border(),
-            focusedBorder: _border(
-              const BorderSide(color: AppColors.primary, width: 1.2),
-            ),
-          ),
+          errorText: emailError,
+          boxed: true,
         ),
         SizedBox(height: compact ? AppSizes.lg : AppSizes.xl),
         if (errorMessage != null) ...[
@@ -68,7 +50,7 @@ class ForgotPasswordForm extends StatelessWidget {
             errorMessage!,
             textAlign: TextAlign.center,
             style: AppTextStyles.caption.copyWith(
-              color: AppColors.error,
+              color: palette.error,
               height: 1.35,
             ),
           ),
@@ -79,7 +61,7 @@ class ForgotPasswordForm extends StatelessWidget {
             successMessage!,
             textAlign: TextAlign.center,
             style: AppTextStyles.caption.copyWith(
-              color: AppColors.success,
+              color: palette.success,
               height: 1.35,
             ),
           ),
@@ -91,35 +73,26 @@ class ForgotPasswordForm extends StatelessWidget {
           child: ElevatedButton(
             onPressed: isSubmitting ? null : onSubmit,
             style: AppButtonStyles.filledPill(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.textInverse,
-              fontSize: compact ? 14 : 15,
-              letterSpacing: .2,
+              backgroundColor: palette.accent,
+              foregroundColor: palette.onAccent,
+              fontSize: compact ? 20 : 24,
+              letterSpacing: 1.4,
             ).copyWith(
-              elevation: WidgetStateProperty.all(1),
-              shadowColor: WidgetStateProperty.all(
-                AppColors.primary.withValues(alpha: .2),
-              ),
+              elevation: WidgetStateProperty.all(0),
+              shape: WidgetStateProperty.all(const RoundedRectangleBorder()),
             ),
             child: isSubmitting
-                ? const SizedBox.square(
+                ? SizedBox.square(
                     dimension: 22,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.4,
-                      color: AppColors.textInverse,
+                      color: palette.onAccent,
                     ),
                   )
                 : Text(l10n.sendResetLink),
           ),
         ),
       ],
-    );
-  }
-
-  OutlineInputBorder _border([BorderSide? side]) {
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSizes.radiusXl),
-      borderSide: side ?? const BorderSide(color: AppColors.divider, width: 1),
     );
   }
 }

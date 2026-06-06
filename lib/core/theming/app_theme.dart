@@ -32,7 +32,7 @@ class AppTheme {
         bodySmall: AppTextStyles.caption,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.authBackground,
         elevation: 0,
         centerTitle: true,
         iconTheme: IconThemeData(color: AppColors.textPrimary),
@@ -62,15 +62,61 @@ class AppTheme {
   }
 
   static ThemeData get dark {
-    final base = light;
+    final scheme = ColorScheme.fromSeed(
+      brightness: Brightness.dark,
+      seedColor: AppColors.primary,
+      primary: AppColors.primary,
+      secondary: AppColors.accentWarm,
+      surface: AppColors.darkSurface,
+      error: AppColors.error,
+    );
 
-    return base.copyWith(
+    return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.darkBackground,
-      colorScheme: base.colorScheme.copyWith(
-        brightness: Brightness.dark,
-        surface: AppColors.darkSurface,
+      colorScheme: scheme,
+      textTheme: TextTheme(
+        displayLarge: AppTextStyles.display.copyWith(
+          color: const Color(0xFFF5F8E8),
+        ),
+        headlineLarge: AppTextStyles.h1.copyWith(
+          color: const Color(0xFFF5F8E8),
+        ),
+        headlineMedium: AppTextStyles.h2.copyWith(
+          color: const Color(0xFFF5F8E8),
+        ),
+        titleLarge: AppTextStyles.h3.copyWith(color: const Color(0xFFF5F8E8)),
+        bodyLarge: AppTextStyles.bodyLg.copyWith(
+          color: const Color(0xFFC8D0B8),
+        ),
+        bodyMedium: AppTextStyles.body.copyWith(
+          color: const Color(0xFFC8D0B8),
+        ),
+        labelLarge: AppTextStyles.label.copyWith(
+          color: const Color(0xFFF5F8E8),
+        ),
+        bodySmall: AppTextStyles.caption.copyWith(
+          color: const Color(0xFF747D66),
+        ),
       ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.darkBackground,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Color(0xFFF5F8E8)),
+        titleTextStyle: TextStyle(
+          color: Color(0xFFF5F8E8),
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: Color(0xFF3C4633),
+        thickness: 1,
+        space: 1,
+      ),
+      inputDecorationTheme: AppInputStyles.theme(),
     );
   }
 }

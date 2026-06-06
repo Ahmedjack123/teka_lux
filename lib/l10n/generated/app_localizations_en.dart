@@ -48,72 +48,108 @@ class AppLocalizationsEn extends AppLocalizations {
       'Discover a curated collection of modern essentials that blend simplicity, quality, and confidence.';
 
   @override
-  String get loginTitle => 'Welcome';
+  String get brandShort => 'TEKA';
 
   @override
-  String get loginSubtitle => 'Please sign in to continue';
+  String get loginTitle => 'WELCOME';
+
+  @override
+  String get loginSubtitle => 'Sign in to access your exclusive archive.';
 
   @override
   String get emailHint => 'Email';
 
   @override
+  String get loginEmailHint => 'archive@teka.com';
+
+  @override
+  String get registerEmailHint => 'NAME@EXAMPLE.COM';
+
+  @override
   String get passwordHint => 'Password';
+
+  @override
+  String get passwordPlaceholder => '••••••••';
 
   @override
   String get rememberMe => 'Remember me';
 
   @override
-  String get forgotPassword => 'Forgot Password?';
+  String get forgotPassword => 'Forgot?';
 
   @override
-  String get signIn => 'Sign In';
+  String get signIn => 'LOG IN';
 
   @override
-  String get signUp => 'Sign Up';
+  String get signUp => 'SIGN UP';
 
   @override
-  String get noAccount => 'Don\'t have an account?';
+  String get noAccount => 'New to the collective?';
 
   @override
-  String get dividerOr => 'OR';
+  String get dividerOr => 'OR CONTINUE WITH';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get continueWithGoogle => 'Google';
 
   @override
-  String get registerTitle => 'Start Your Luxe Wardrobe';
+  String get registerTitle => 'CREATE ACCOUNT';
 
   @override
-  String get registerSubtitle =>
-      'Create your account to save favorites and checkout faster.';
+  String get registerSubtitle => '';
 
   @override
-  String get fullNameHint => 'Full name';
+  String get fullNameLabel => 'Full Name';
 
   @override
-  String get phoneNumberHint => 'Phone number';
+  String get phoneNumberLabel => 'Phone Number';
 
   @override
-  String get confirmPasswordHint => 'Confirm password';
+  String get fullNameHint => 'ENTER YOUR NAME';
 
   @override
-  String get createAccount => 'Create Account';
+  String get phoneNumberHint => '091XXXXXXX';
+
+  @override
+  String get confirmPasswordHint => 'CONFIRM PASSWORD';
+
+  @override
+  String get createAccount => 'SIGN UP';
 
   @override
   String get alreadyHaveAccount => 'Already have an account?';
 
   @override
-  String get forgotPasswordTitle => 'Forgot Password';
+  String get agreeToTermsPrefix => 'I agree to the';
+
+  @override
+  String get termsAndConditions => 'Terms and Conditions';
+
+  @override
+  String get andThe => 'and the';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy.';
+
+  @override
+  String get validationTermsRequired =>
+      'Agree to the terms and privacy policy to continue.';
+
+  @override
+  String get forgotPasswordTitle => 'RESET PASSWORD';
 
   @override
   String get forgotPasswordDescription =>
-      'Enter the email address associated with your account, and we’ll send you a link to reset your password.';
+      'Enter your registered email address to receive a secure recovery link for your account.';
 
   @override
-  String get emailAddressHint => 'Email Address';
+  String get resetPasswordAccessLabel => 'ACCESS';
 
   @override
-  String get sendResetLink => 'SEND RESET LINK';
+  String get emailAddressHint => 'user@teka.studio';
+
+  @override
+  String get sendResetLink => 'SEND LINK';
 
   @override
   String get backToLogin => 'BACK TO LOGIN';
@@ -238,11 +274,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validationPasswordsDoNotMatch => 'Passwords do not match.';
 
   @override
-  String get emailVerificationTitle => 'Verify Your Email';
+  String get emailVerificationTitle => 'VERIFY EMAIL';
 
   @override
   String get emailVerificationDescription =>
-      'We sent a verification link to your email. Open it, then return here and we’ll continue automatically.';
+      'Open the secure link we sent to your inbox, then return here to activate your account.';
 
   @override
   String get emailVerificationChecking => 'Checking verification status...';
