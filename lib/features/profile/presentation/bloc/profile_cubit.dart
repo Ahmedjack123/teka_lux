@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../../auth/domain/usecases/logout.dart';
+import '../../../auth/presentation/bloc/auth_session_cubit.dart';
 import '../../domain/entities/address.dart';
 import '../../domain/usecases/delete_address.dart';
 import '../../domain/usecases/get_addresses.dart';
@@ -17,11 +19,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     required GetAddressesUseCase getAddresses,
     required SaveAddressUseCase saveAddress,
     required DeleteAddressUseCase deleteAddress,
+    required SignOutUseCase signOut,
+    required AuthSessionCubit authSessionCubit,
   })  : _getProfile = getProfile,
         _updateProfile = updateProfile,
         _getAddresses = getAddresses,
         _saveAddress = saveAddress,
         _deleteAddress = deleteAddress,
+        _signOut = signOut,
+        _authSessionCubit = authSessionCubit,
         super(const ProfileState());
 
   final GetProfileUseCase _getProfile;
@@ -29,6 +35,8 @@ class ProfileCubit extends Cubit<ProfileState> {
   final GetAddressesUseCase _getAddresses;
   final SaveAddressUseCase _saveAddress;
   final DeleteAddressUseCase _deleteAddress;
+  final SignOutUseCase _signOut;
+  final AuthSessionCubit _authSessionCubit;
 
   Future<void> loadProfile() async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
@@ -113,6 +121,23 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
 
     await loadAddresses();
+  }
+
+  Future<void> signOut() async {
+    if (state.isSigningOut) {
+      return;
+    }
+
+    emit(state.copyWith(signOutStatus: ProfileSignOutStatus.signingOut));
+
+    final result = await _signOut(const NoParams());
+
+    await result.fold((_) async {
+      emit(state.copyWith(signOutStatus: ProfileSignOutStatus.failure));
+    }, (_) async {
+      await _authSessionCubit.refresh();
+      emit(state.copyWith(signOutStatus: ProfileSignOutStatus.signedOut));
+    });
   }
 
   String _failureMessage(Failure failure, String fallback) {

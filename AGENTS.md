@@ -44,6 +44,7 @@ lib/
 ├── firebase_options.dart              # FlutterFire-generated platform configs
 ├── core/
 │   ├── config/
+│   │   ├── stitch_config.dart         # STITCH_API_KEY from --dart-define
 │   │   └── supabase_config.dart       # SUPABASE_URL / SUPABASE_ANON_KEY from --dart-define
 │   ├── constants/
 │   │   ├── app_constants.dart         # Asset paths
@@ -199,6 +200,7 @@ dart run flutter_native_splash:create
 | `l10n.yaml` | gen-l10n config (ARB dir, template, output class) |
 | `firebase.json` | FlutterFire platform mappings (Android/iOS) |
 | `supabase/config.toml` | Supabase CLI local-dev configuration |
+| `.env` | Local environment variables (API keys, etc.) |
 | `devtools_options.yaml` | Dart DevTools extension settings |
 
 ---

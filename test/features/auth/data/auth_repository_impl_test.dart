@@ -3,7 +3,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:teka_luxe/core/errors/auth_error_code.dart';
 import 'package:teka_luxe/core/errors/exceptions.dart';
 import 'package:teka_luxe/core/errors/failures.dart';
-import 'package:teka_luxe/core/utils/result.dart';
 import 'package:teka_luxe/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:teka_luxe/features/auth/data/models/user_model.dart';
 import 'package:teka_luxe/features/auth/data/repositories/auth_repository_impl.dart';
@@ -41,7 +40,8 @@ void main() {
 
   group('AuthRepositoryImpl', () {
     group('signInWithEmail', () {
-      test('should return Success with UserEntity on successful login', () async {
+      test('should return Success with UserEntity on successful login',
+          () async {
         when(() => mockDatasource.signInWithEmail(
               email: any(named: 'email'),
               password: any(named: 'password'),
@@ -166,7 +166,8 @@ void main() {
 
       test('should return Failure on Google sign-in error', () async {
         when(() => mockDatasource.signInWithGoogle()).thenThrow(
-          const AuthException(errorCode: AuthErrorCode.accountExistsWithDifferentCredential),
+          const AuthException(
+              errorCode: AuthErrorCode.accountExistsWithDifferentCredential),
         );
 
         final result = await repository.signInWithGoogle();
@@ -184,7 +185,8 @@ void main() {
         when(() => mockDatasource.sendPasswordResetEmail(any()))
             .thenAnswer((_) async {});
 
-        final result = await repository.sendPasswordResetEmail('test@example.com');
+        final result =
+            await repository.sendPasswordResetEmail('test@example.com');
 
         expect(result.isSuccess, isTrue);
         verify(() => mockDatasource.sendPasswordResetEmail('test@example.com'))
@@ -196,7 +198,8 @@ void main() {
           const AuthException(errorCode: AuthErrorCode.userNotFound),
         );
 
-        final result = await repository.sendPasswordResetEmail('unknown@example.com');
+        final result =
+            await repository.sendPasswordResetEmail('unknown@example.com');
 
         expect(result.isFailure, isTrue);
         expect(

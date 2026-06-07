@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:teka_luxe/core/errors/failures.dart';
 import 'package:teka_luxe/core/errors/auth_error_code.dart';
-import 'package:teka_luxe/core/usecases/usecase.dart';
 import 'package:teka_luxe/core/utils/result.dart';
 import 'package:teka_luxe/features/auth/domain/entities/user.dart';
 import 'package:teka_luxe/features/auth/domain/repositories/auth_repository.dart';

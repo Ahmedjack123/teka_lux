@@ -7,6 +7,7 @@ import '../../features/auth/presentation/pages/sign_up/sign_up_page.dart';
 import '../../features/auth/presentation/pages/verify_email/verify_email_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/orders/presentation/pages/orders_page.dart';
+import '../../features/profile/presentation/pages/addresses_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/search/presentation/pages/search_page.dart';
 import '../../features/startup/presentation/pages/onboarding_page.dart';
@@ -87,6 +88,15 @@ class AppRouter {
       pageBuilder: (context, state) {
         return _fadePage(state, const ProfilePage());
       },
+      routes: [
+        GoRoute(
+          path: 'addresses',
+          name: RouteNames.addresses,
+          pageBuilder: (context, state) {
+            return _fadePage(state, const AddressesPage());
+          },
+        ),
+      ],
     ),
     GoRoute(
       path: RouteNames.ordersPath,

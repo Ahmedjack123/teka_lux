@@ -168,6 +168,8 @@ Future<void> initDependencies() async {
       getAddresses: sl(),
       saveAddress: sl(),
       deleteAddress: sl(),
+      signOut: sl(),
+      authSessionCubit: sl(),
     ),
   );
 
